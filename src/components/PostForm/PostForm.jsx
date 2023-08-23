@@ -8,10 +8,12 @@ function PostForm(){
         await obs.connect(`ws://${url}:${port}`, password);
          const recordingFolder= await obs.call('GetRecordDirectory')
          console.log(recordingFolder)
-        obs.on('StreamStopped', ()=>{
-          console.log('stream over')
-        })
-        }
+         
+         await obs.on("StreamStateChanged", ()=>{
+            
+         console.log('hi')
+    })
+}
     return(<>
     <form className="PostForm__server" onSubmit={(e)=>{
         e.preventDefault()
