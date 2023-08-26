@@ -1,7 +1,7 @@
+import "./Home.scss"
 function Home(){
     return(
         <>
-        <h1>Hands-Off</h1>
         <section className="home__about-section">
             <h2>About</h2>
             <h3>Hands-Off is a tool for aspiring content-creators looking to protect their brand</h3>
