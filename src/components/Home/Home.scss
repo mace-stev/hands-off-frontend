@@ -1,3 +1,13 @@
 @use "../../styles/partials/general" as *;
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
+
+.home {
+    .home__about-section {
+        margin: 1rem;
+
+        .home__list {
+            font-style: italic;
+        }
+    }
+}

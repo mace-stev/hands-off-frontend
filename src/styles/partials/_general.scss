@@ -1,5 +1,9 @@
+@use "./font-face" as *;
 body{
     background: #0E1619;
     color: #CBF4FA;
-    margin: 0
+    margin: 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400;
+
 }

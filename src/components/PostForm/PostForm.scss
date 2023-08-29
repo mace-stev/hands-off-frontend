@@ -1,3 +1,20 @@
 @use "../../styles/partials/general" as *;
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
+.PostForm__OBS-server{
+    padding: 1rem;
+    & input{
+        width: 100%;
+        margin: .25rem 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+.PostForm__OBS--submit{
+    height: 3rem;
+    width: 100%;
+}
+}
+.YT-sign-in{
+    width: 3rem;
+    height: 3rem;
+}

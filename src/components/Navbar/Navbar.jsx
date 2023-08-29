@@ -8,7 +8,7 @@ function Navbar(){
     <NavLink to="/"><img src={logo} alt="Hands-Off Logo" className="hands-off-logo"/></NavLink>
     <h1>Hands-Off</h1>
 <   NavLink to="/sites" className="navlink-text">Sites</NavLink>
-    <NavLink to="/post" className="navlink-text">Post</NavLink>
+    <NavLink to="/post" className="navlink-text">Start</NavLink>
     </section>)
 }
 export default Navbar;
