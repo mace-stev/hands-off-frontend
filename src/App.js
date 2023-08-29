@@ -3,6 +3,7 @@ import Home from "../src/components/Home/Home"
 import PostForm from "../src/components/PostForm/PostForm"
 import Navbar from "../src/components/Navbar/Navbar"
 import Sites from "../src/components/Sites/Sites"
+import Footer from "../src/components/Footer/Footer"
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ function App() {
       <Route path="/post" element={<PostForm/>}/>
       <Route path="/sites" element={<Sites/>}/>
     </Routes>
+    <Footer/>
     </BrowserRouter>
   );
 }

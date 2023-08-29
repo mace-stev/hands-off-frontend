@@ -1,0 +1,29 @@
+@use "../../styles/partials/general" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+.footer{
+    padding: 0 1rem;
+    border: 5px solid #CBF4FA;
+    border-radius: .5rem;
+    font-size: .75rem;
+    box-sizing: border-box;
+    margin-top:3rem;
+    .footer__title{
+        font-style: italic;
+    }
+    .footer__list{
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+        :link{
+            text-decoration: none;
+            color:#CBF4FA;
+        }
+        :hover{
+            font-weight: 700;
+            border: 1px solid #FFFFFF;
+            color: #FFFFFF;
+        }
+    }
+}
