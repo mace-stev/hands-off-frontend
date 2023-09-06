@@ -1,19 +1,24 @@
-import "./PostForm.scss"
+import "./PostForm.scss";
 import OBSWebSocket from 'obs-websocket-js';
-import Popup from 'reactjs-popup'
-import { useState } from 'react'
-import 'reactjs-popup/dist/index.css'
+import Popup from 'reactjs-popup';
+import { useState } from 'react';
+import 'reactjs-popup/dist/index.css';
+import axios from 'axios';
+
+/*  */
+
 const obs = new OBSWebSocket();
 
 function PostForm() {
     const [open, setOpen] = useState(false);
     const [recordingFolder, setRecordingFolder] = useState();
     const [fileName, setFileName] = useState()
+
+
+    ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     // Parameters to pass to OAuth 2.0 endpoint.
-
-
     const params = {
         'client_id': '847455316444-9na1bbdge456k4chj3fb5q53486i4rb1.apps.googleusercontent.com',
         'redirect_uri': 'http://localhost:3000/post',
@@ -59,7 +64,7 @@ function PostForm() {
     }
 
     function oauth2SignIn(e) {
-      
+
         for (let p in params) {
             const input = document.createElement('input');
             input.setAttribute('type', 'hidden');
@@ -67,17 +72,46 @@ function PostForm() {
             input.setAttribute('value', params[p]);
             e.target.appendChild(input);
         }
-        console.log("hi")
+
         e.target.submit()
 
     }
-
-    function popupHandler(e) {
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+    async function popupHandler(e) {
         e.preventDefault()
-        console.log(recordingFolder)
-        console.log(fileName)
-      
+
+        await axios.post(`http://localhost:8080`, { recordingFolder }, {
+            headers: {
+                'Origin': 'http://localhost:3000'
+            }
+        }).then((response) => {
+            console.log('hi')
+            const snippetData = {
+                title: e.target['video-title'].value,
+                description: e.target['video-description'].value,
+                tags: ['tag1', 'tag2'],
+                categoryId: '22'
+            }
+            const formData = new FormData();
+            formData.append('snippet', JSON.stringify(snippetData))
+            formData.append('file', response.data)
+
+
+            const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
+           return axios.post('https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&' +
+                'access_token=' + params['access_token'], formData, { headers: { 'Content-Type': `multipart/related; boundary=${formData._boundary}`, 'Access-Control-Allow-Origin': 'http://localhost:3000' } }
+                    .then((res) => { console.log(res.data) })
+                    .catch((error) => { console.log(error) })
+
+
+            )
+
+        })
     }
+    ///////////////////////////////////////////////////////////////////////////
+    ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
         await obs.connect(`ws://${url}:${port}`, password).then((response) => {
             alert("Successfully connected to the server");
@@ -85,19 +119,19 @@ function PostForm() {
             alert("error connecting to OBS-Websocket Server");
         });
         const recordingFolder = await obs.call('GetRecordDirectory')
-      
+
 
         await obs.on('StreamStateChanged', (data) => {
-            obs.call('GetRecordStatus').then((response)=>{
-                setFileName(response)
-             })
-            if (data.outputState === "OBS_WEBSOCKET_OUTPUT_STOPPING"){
+
+            if (data.outputState === "OBS_WEBSOCKET_OUTPUT_STOPPING") {
                 setOpen(true);
-                setRecordingFolder(recordingFolder)
-               
+                const tempStore = Object.values(recordingFolder)
+                setRecordingFolder(tempStore[0])
+
                 //open is the state variable used to trigger the popup.
-            }})
-            
+            }
+        })
+
     }
     return (<>
         <form className="PostForm__OBS-server" onSubmit={(e) => {
@@ -115,8 +149,9 @@ function PostForm() {
             <button type="submit" className="YT-sign-in">Sign in to YT</button>
         </form>
 
-        <Popup open={open} position="center center">
+        <Popup open={open} position="center center" closeOnDocumentClick={false}>
             <form className="postForm__popup" onSubmit={popupHandler}>
+                <button onClick={()=>setOpen(false)}>Close</button>
                 <input type="text" name="video-title" placeholder='The title of your video'></input>
                 <input type="text" name="video-description" placeholder='The description of your video'></input>
                 <button type="submit">Post Video to Youtube</button>
