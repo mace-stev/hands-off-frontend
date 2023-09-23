@@ -84,7 +84,8 @@ function PostForm() {
 
         await axios.post(`http://localhost:8080`, { recordingFolder }, {
             headers: {
-                'Origin': 'http://localhost:3000'
+        
+                'Content-Type': 'application/json'
             }
         }).then((response) => {
             console.log('hi')
@@ -95,20 +96,18 @@ function PostForm() {
                 categoryId: '22'
             }
             const formData = new FormData();
-            formData.append('snippet', JSON.stringify(snippetData))
-            formData.append('file', response.data)
-
-
+        console.log(response.headers['content-length'])
+        console.log(response.data.length)
+            formData?.append('snippet', JSON.stringify(snippetData))
+            formData?.append('file', response?.data)
+        
             const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
            return axios.post('https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&' +
-                'access_token=' + params['access_token'], formData, { headers: { 'Content-Type': `multipart/related; boundary=${formData._boundary}`, 'Access-Control-Allow-Origin': 'http://localhost:3000' } }
+                'access_token=' + params['access_token'], formData, { headers: { 'Content-Type': `multipart/related; boundary=${formData._boundary}`, 'Access-Control-Allow-Origin': 'http://localhost:3000', "Access-Control-Allow-Methods": "POST" } })
                     .then((res) => { console.log(res.data) })
                     .catch((error) => { console.log(error) })
-
-
-            )
-
-        })
+        }).catch((err)=>{console.log(`${err}: error sending folder/video to server or to Youtube`)})
+    
     }
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
