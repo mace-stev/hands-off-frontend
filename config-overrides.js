@@ -19,7 +19,9 @@ module.exports = function override(config, env) {
         new webpack.ProvidePlugin({
             process: 'process/browser',
             Buffer: ['buffer', 'Buffer'],
-        }), new NodePolyfillPlugin()
+        }), new NodePolyfillPlugin({
+            excludeAliases: ['console']
+          })
     );
 
     return config;
