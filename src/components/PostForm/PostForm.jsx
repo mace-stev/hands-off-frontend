@@ -67,9 +67,39 @@ function PostForm() {
 
     function popupHandler(e) {
         e.preventDefault()
+<<<<<<< HEAD
         console.log(recordingFolder)
         console.log(fileName)
       
+=======
+
+        await axios.post(`http://localhost:8080`, { recordingFolder }, {
+            headers: {
+        
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => {
+            console.log('hi')
+            const snippetData = {
+                title: e.target['video-title'].value,
+                description: e.target['video-description'].value,
+                tags: ['tag1', 'tag2'],
+                categoryId: '22'
+            }
+            const formData = new FormData();
+        console.log(response.headers['content-length'])
+        console.log(response.data.length)
+            formData?.append('snippet', JSON.stringify(snippetData))
+            formData?.append('file', response?.data)
+        
+            const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
+           return axios.post('https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&' +
+                'access_token=' + params['access_token'], formData, { headers: { 'Content-Type': `multipart/related; boundary=${formData._boundary}`, 'Access-Control-Allow-Origin': 'http://localhost:3000', "Access-Control-Allow-Methods": "POST" } })
+                    .then((res) => { console.log(res.data) })
+                    .catch((error) => { console.log(error) })
+        }).catch((err)=>{console.log(`${err}: error sending folder/video to server or to Youtube`)})
+    
+>>>>>>> c48ee62 (added a node version for deployment)
     }
     async function OBS(port, url, password) {
         await obs.connect(`ws://${url}:${port}`, password).then((response) => {
