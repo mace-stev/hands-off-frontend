@@ -1,0 +1,3 @@
+[submodule "hands-off-server"]
+	path = hands-off-server
+	url = https://github.com/mace-stev/hands-off-server.git
