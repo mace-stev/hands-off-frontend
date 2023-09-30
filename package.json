@@ -14,6 +14,7 @@
     "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",
     "https-browserify": "^1.0.0",
+    "newrelic": "^11.1.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "nodemon": "^3.0.1",
     "npm": "^10.1.0",
@@ -32,10 +33,11 @@
     "stream-http": "^3.2.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "react-app-rewired start && node -r newrelic index.js",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
+
   },
   "eslintConfig": {
     "extends": [
