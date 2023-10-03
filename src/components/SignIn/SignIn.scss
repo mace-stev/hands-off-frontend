@@ -1,0 +1,44 @@
+@use "../../styles/partials/general" as *;
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.sign-in-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+
+    & .sign-in-form__username {
+
+        @include textInput;
+
+    }
+
+    & .sign-in-form__password {
+        @include textInput;
+    }
+
+    & .sign-in-form__login {
+        @include button
+    }
+}
+
+.signup-button {
+    @include button;
+    display: block;
+}
+.popup-content{
+    width: 100%;
+    height: fit-content;
+    background: #CBF4FA;
+}
+
+.signup__popup {
+    background: #CBF4FA;
+    width: 100%;
+    
+    .signup__popup--saveDir {
+        
+
+    }
+}
