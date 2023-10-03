@@ -1,3 +1,25 @@
+@mixin textInput{
+    height: 1.5rem;
+    border-radius: 1rem;
+    padding: 0;
+    box-sizing:border-box;
+    display: block;
+    margin: 2rem 1rem;
+    padding-left: 1rem;
+    background-color:#CBF4FA;
+    color: #0E1619;
+}
+@mixin button{
+        height: 2rem;
+        width:50%;
+        border: 5px solid #CBF4FA;
+        background: #0E1619;
+        color: #CBF4FA;
+        border-radius: 10%;
+        margin: auto;
+        text-align: center;
+        @content;
+}
 @mixin tablet{
     @content;
 }

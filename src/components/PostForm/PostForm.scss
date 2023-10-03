@@ -4,10 +4,7 @@
 .PostForm__OBS-server{
     padding: 1rem;
     & input{
-        width: 100%;
-        margin: .25rem 0;
-        padding: 0;
-        box-sizing: border-box;
+        @include textInput;
     }
 .PostForm__OBS--submit{
     height: 3rem;
