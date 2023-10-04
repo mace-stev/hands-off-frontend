@@ -18,23 +18,14 @@ function SignIn() {
     
     function popupHandler(e) {
         e.preventDefault()
-        axios.post()
+        
       
         
 
     }
     function signinHandler(e) {
         e.preventDefault()
-        keytar.getPassword('hands-off', e.target.username.value)
-            .then((data) => {
-                if (data.response === e.target.password) {
-                    loggedIn(true)
-                    navigate('/post')
-
-                }
-                alert('Wrong, try again')
-                return
-            })
+        
     }
     return (
         <>
