@@ -5,8 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from 'axios'
 import "./SignIn.scss"
-const keytar= require('keytar')
-const port = process.env.PORT || 4234
+
+
 
 function SignIn() {
     const [open, setOpen] = useState(false);
@@ -15,12 +15,10 @@ function SignIn() {
     const loggedIn = false
     
 
-    function signUp(){
-        
-    }
-
+    
     function popupHandler(e) {
         e.preventDefault()
+        axios.post()
       
         
 
