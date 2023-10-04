@@ -1,1 +1,1 @@
-web: npm start && cd hands-off-server && npm start
+web: npm start && cd hands-off-server && node index.js
