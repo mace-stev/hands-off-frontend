@@ -25,7 +25,11 @@ function SignIn() {
     }
     function signinHandler(e) {
         e.preventDefault()
+<<<<<<< HEAD
         
+=======
+       
+>>>>>>> 0a91cd3 (Update SignIn.jsx)
     }
     return (
         <>
