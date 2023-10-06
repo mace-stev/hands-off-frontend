@@ -35,7 +35,7 @@
     "stream-http": "^3.2.0"
   },
   "scripts": {
-    "start": "react-app-rewired start && node -r newrelic index.js && cd hands-off-server && npm start",
+    "start": "react-app-rewired start && npm i && node -r newrelic index.js && npm i && cd hands-off-server && npm start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
