@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "hands-off-frontend",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -38,8 +38,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "echo Skip build on Heroku"
+    "eject": "react-scripts eject"
+   
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +58,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "heroku-run-build-script": true
+  }
+ 
 }
