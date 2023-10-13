@@ -19,14 +19,9 @@ function PostForm() {
     // Google's OAuth 2.0 endpoint for requesting an access token
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     // Parameters to pass to OAuth 2.0 endpoint.
-    const params = {
-        'client_id': '847455316444-9na1bbdge456k4chj3fb5q53486i4rb1.apps.googleusercontent.com',
-        'redirect_uri': 'http://localhost:3000/post',
-        'response_type': 'token',
-        'scope': 'https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.upload',
-        'include_granted_scopes': 'true',
-        'state': 'pass-through value'
-    };
+
+
+  
     const fragmentString = window.location.hash.substring(1);
 
     // Parse query string to see if page request is coming from OAuth 2.0 server.
