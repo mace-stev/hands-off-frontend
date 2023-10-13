@@ -21,7 +21,7 @@ function PostForm() {
     // Parameters to pass to OAuth 2.0 endpoint.
 
 
-  
+    const params=process.env.PARAMS
     const fragmentString = window.location.hash.substring(1);
 
     // Parse query string to see if page request is coming from OAuth 2.0 server.
