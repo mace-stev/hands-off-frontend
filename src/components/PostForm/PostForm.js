@@ -4,6 +4,8 @@ import Popup from 'reactjs-popup';
 import { useState } from 'react';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
+import dotenv from "dotenv"
+dotenv.config()
 
 /*  */
 
@@ -13,19 +15,24 @@ function PostForm() {
     const [open, setOpen] = useState(false);
     const [recordingFolder, setRecordingFolder] = useState();
     const [fileName, setFileName] = useState()
-
+    const [params, setParams]= useState()
+   
 
     ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
+
+
+    async function getParams(){
+        await axios.get('http://localhost:3000/api/auth')
+        .then((response)=>{
+            console.log(response)
+            setParams(response.data)
+        })
+    
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     // Parameters to pass to OAuth 2.0 endpoint.
-
-
-    const params=process.env.PARAMS
     const fragmentString = window.location.hash.substring(1);
-
     // Parse query string to see if page request is coming from OAuth 2.0 server.
-    ;
     let regex = /([^&=]+)=([^&]*)/g, m;
     while (m = regex.exec(fragmentString)) {
         params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
@@ -36,7 +43,8 @@ function PostForm() {
             trySampleRequest();
         }
     }
-
+}
+getParams()
     function trySampleRequest(e) {
         const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
         if (params && params['access_token']) {
@@ -83,7 +91,7 @@ function PostForm() {
             categoryId: '22'
         }
         const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
-        await axios.post(`http://localhost:8080`, { recordingFolder, params, snippetData }, {
+        await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
         
                 'Content-Type': 'application/json'
@@ -124,7 +132,8 @@ function PostForm() {
             console.log(e.target['server-url'].value)
             OBS(e.target['server-port'].value, e.target['server-url'].value, e.target['server-password'].value)
         }}>
-            <h1>Connect To Your OBS Server</h1>
+            <h1 onClick={()=>{console.log(process.env.PARAMS)}}>Connect To Your OBS Server</h1>
+            
             <input type='text' name='server-port' placeholder="port" required></input>
             <input type='text' name='server-url' placeholder="url" required></input>
             <input type='text' name='server-password' placeholder="password" required></input>
