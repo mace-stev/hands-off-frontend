@@ -16,7 +16,7 @@ function PostForm() {
     const [recordingFolder, setRecordingFolder] = useState();
     const [fileName, setFileName] = useState()
     const [params, setParams]= useState()
-   
+    const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
 
     ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
@@ -29,7 +29,7 @@ function PostForm() {
             setParams(response.data)
         })
     
-    const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+   
     // Parameters to pass to OAuth 2.0 endpoint.
     const fragmentString = window.location.hash.substring(1);
     // Parse query string to see if page request is coming from OAuth 2.0 server.
