@@ -1,7 +1,7 @@
 import "./PostForm.scss";
 import OBSWebSocket from 'obs-websocket-js';
 import Popup from 'reactjs-popup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
 import dotenv from "dotenv"
@@ -15,38 +15,49 @@ function PostForm() {
     const [open, setOpen] = useState(false);
     const [recordingFolder, setRecordingFolder] = useState();
     const [fileName, setFileName] = useState()
-    const [params, setParams]= useState()
+    const [params, setParams]=useState([])
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
 
     ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
 
 
-    async function getParams(){
-        await axios.get('http://localhost:3000/api/auth')
-        .then((response)=>{
-            console.log(response)
-            setParams(response.data)
-        })
-    
-   
-    // Parameters to pass to OAuth 2.0 endpoint.
-    const fragmentString = window.location.hash.substring(1);
-    // Parse query string to see if page request is coming from OAuth 2.0 server.
-    let regex = /([^&=]+)=([^&]*)/g, m;
-    while (m = regex.exec(fragmentString)) {
-        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-    }
-    if (Object.keys(params).length > 0) {
-        localStorage.setItem('oauth2-test-params', JSON.stringify(params));
-        if (params['state'] && params['state'] == 'try_sample_request') {
-            trySampleRequest();
-        }
-    }
-}
-getParams()
+    useEffect(() => {
+        axios.post('http://localhost:3000/api/auth',undefined, {headers: {
+
+        'Accept': 'application/json'
+    }})
+            .then((response) => {
+                console.log(response.data)
+                params.push(response.data)
+                setParams(params[0])
+                console.log(params)
+                const fragmentString = window.location.hash.substring(1);
+                // Parse query string to see if page request is coming from OAuth 2.0 server.
+                let regex = /([^&=]+)=([^&]*)/g, m;
+                while (m = regex.exec(fragmentString)) {
+                    params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+                }
+                if (Object.keys(params).length > 0) {
+                    localStorage.setItem('oauth2-test-params', JSON.stringify(params));
+                    if (params['state'] && params['state'] == 'try_sample_request') {
+                        trySampleRequest();
+                    }
+                }
+
+            }).catch((err) => {
+                console.log(err+": error getting params")
+            })
+        // Parameters to pass to OAuth 2.0 endpoint.
+
+
+    }, [])
+
+
+
     function trySampleRequest(e) {
-        const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
+        setParams(JSON.parse(localStorage.getItem('oauth2-test-params')));
+        console.log(params)
         if (params && params['access_token']) {
             const xhr = new XMLHttpRequest();
             xhr.open('GET',
@@ -79,9 +90,9 @@ getParams()
         e.target.submit()
 
     }
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////
     async function popupHandler(e) {
         e.preventDefault()
         const snippetData = {
@@ -90,19 +101,20 @@ getParams()
             tags: ['tag1', 'tag2'],
             categoryId: '22'
         }
-        const params = JSON.parse(localStorage.getItem('oauth2-test-params'));
+        const params = JSON.parse(localStorage.getItem('oauth2-test-params'))
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
-        
+
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
             console.log(response)
-            
-          
-        }).catch((err)=>{console.log(`${JSON.stringify(err)}: error sending folder/video to server or to Youtube`)})
-    
+
+
+        }).catch((err) => { console.log(`${err}: error sending folder/video to server or to Youtube`) })
+
     }
+
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
@@ -126,14 +138,15 @@ getParams()
         })
 
     }
+
     return (<>
         <form className="PostForm__OBS-server" onSubmit={(e) => {
             e.preventDefault()
             console.log(e.target['server-url'].value)
             OBS(e.target['server-port'].value, e.target['server-url'].value, e.target['server-password'].value)
         }}>
-            <h1 onClick={()=>{console.log(process.env.PARAMS)}}>Connect To Your OBS Server</h1>
-            
+            <h1>Connect To Your OBS Server</h1>
+
             <input type='text' name='server-port' placeholder="port" required></input>
             <input type='text' name='server-url' placeholder="url" required></input>
             <input type='text' name='server-password' placeholder="password" required></input>
@@ -145,7 +158,7 @@ getParams()
 
         <Popup open={open} position="center center" closeOnDocumentClick={false}>
             <form className="postForm__popup" onSubmit={popupHandler}>
-                <button onClick={()=>setOpen(false)}>Close</button>
+                <button onClick={() => setOpen(false)}>Close</button>
                 <input type="text" name="video-title" placeholder='The title of your video'></input>
                 <input type="text" name="video-description" placeholder='The description of your video'></input>
                 <button type="submit">Post Video to Youtube</button>
