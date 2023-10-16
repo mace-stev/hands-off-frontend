@@ -101,7 +101,7 @@ function PostForm() {
             tags: ['tag1', 'tag2'],
             categoryId: '22'
         }
-        setParams(JSON.parse(localStorage.getItem('oauth2-test-params')));
+        console.log((JSON.parse(localStorage.getItem('oauth2-test-params'))));
         console.log(params)
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
