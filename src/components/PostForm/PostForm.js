@@ -103,12 +103,16 @@ function PostForm() {
         }
         console.log((JSON.parse(localStorage.getItem('oauth2-test-params'))));
         console.log(params)
+        if (!params['access_token']) {
+            oauth2SignIn(e)}
+       
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
 
                 'Content-Type': 'application/json'
             }
-        }).then((response) => {
+        
+    }).then((response) => {
             console.log(response)
 
 
