@@ -102,7 +102,7 @@ function PostForm() {
             tags: ['tag1', 'tag2'],
             categoryId: '22'
         }
-        setParams(store[0])
+        setParams(store)
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
 
