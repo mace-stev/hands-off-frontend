@@ -105,7 +105,7 @@ function PostForm() {
        
         setParams(store)
         console.log(store)
-        await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
+        await axios.post(`http://localhost:3000/api`, { recordingFolder, store , snippetData }, {
             headers: {
 
                 'Content-Type': 'application/json'
