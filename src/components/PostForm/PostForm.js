@@ -17,7 +17,7 @@ function PostForm() {
     const [fileName, setFileName] = useState()
     const [params, setParams]=useState([])
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
-
+    let store=undefined;
     ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
 
@@ -31,6 +31,7 @@ function PostForm() {
                 console.log(response.data)
                 params.push(response.data)
                 setParams(params[0])
+                store=params
                 console.log(params)
                 const fragmentString = window.location.hash.substring(1);
                 // Parse query string to see if page request is coming from OAuth 2.0 server.
@@ -101,11 +102,7 @@ function PostForm() {
             tags: ['tag1', 'tag2'],
             categoryId: '22'
         }
-        console.log((JSON.parse(localStorage.getItem('oauth2-test-params'))));
-        console.log(params)
-        if (!params['access_token']) {
-            oauth2SignIn(e)}
-       
+        setParams(store)
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
 
