@@ -103,13 +103,13 @@ function PostForm() {
             categoryId: '22'
         }
        
-        setParams(store['access_token'])
+        setParams(JSON.stringify(store))
         console.log(params)
         console.log(store[0])
         console.log(store['access_token'])
         console.log(store[0['access_token']])
         console.log(store)
-        await axios.post(`http://localhost:3000/api`, { recordingFolder, store, snippetData}, {
+        await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData}, {
             headers: {
 
                 'Content-Type': 'application/json'
