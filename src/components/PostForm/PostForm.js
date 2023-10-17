@@ -103,7 +103,7 @@ function PostForm() {
             categoryId: '22'
         }
        
-        setParams(JSON.stringify(store))
+        setParams(store)
         console.log(params)
         console.log(store[0])
         console.log(store['access_token'])
@@ -111,7 +111,7 @@ function PostForm() {
         console.log(store)
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData}, {
             headers: {
-
+               'Authorization': `Bearer ${store['access_token']}`,
                 'Content-Type': 'application/json'
             }
         
