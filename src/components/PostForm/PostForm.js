@@ -126,12 +126,13 @@ function PostForm() {
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
-        await obs.connect(`ws://${url}:${port}`, password).then((response) => {
+        await obs.connect(`wss://${url}:${port}`, password).then((response) => {
             alert("Successfully connected to the server");
         }).catch((err) => {
             alert("error connecting to OBS-Websocket Server");
         });
         const recordingFolder = await obs.call('GetRecordDirectory')
+       
 
 
         await obs.on('StreamStateChanged', (data) => {
