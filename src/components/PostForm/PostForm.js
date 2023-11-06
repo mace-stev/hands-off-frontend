@@ -101,14 +101,10 @@ function PostForm() {
             description: e.target['video-description'].value,
             tags: ['tag1', 'tag2'],
             categoryId: '22'
+            
         }
        
         setParams(store)
-        console.log(params)
-        console.log(store[0])
-        console.log(store['access_token'])
-        console.log(store[0['access_token']])
-        console.log(store)
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData}, {
             headers: {
                'Authorization': `Bearer ${store['access_token']}`,
@@ -126,9 +122,10 @@ function PostForm() {
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
-        await obs.connect(`wss://${url}:${port}`, password).then((response) => {
+        await obs.connect(`ws://${url}:${port}`, password).then((response) => {
             alert("Successfully connected to the server");
         }).catch((err) => {
+            console.log(err)
             alert("error connecting to OBS-Websocket Server");
         });
         const recordingFolder = await obs.call('GetRecordDirectory')

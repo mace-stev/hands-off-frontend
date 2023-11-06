@@ -18,7 +18,14 @@ function SignIn() {
     
     function popupHandler(e) {
         e.preventDefault()
-        axios.post('http://localhost:3000/api/profile')
+        axios.post('http://localhost:3000/api/profile',{
+            username: e.target['username'].value,
+            password: e.target['password'].value
+        }).then((response)=>{
+            alert('Profile Created')
+        }).catch((err)=>{
+            console.log(err+" error creating profile.")
+        })
       
         
 
