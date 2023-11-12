@@ -16,3 +16,19 @@
     height: 3rem;
     margin-left: 1rem;
 }
+@include tablet{
+
+    .PostForm__OBS-server{
+        padding: 2rem;
+       
+    .PostForm__OBS--submit{
+        height: 3rem;
+        width: 50%;
+    }
+    }
+    .YT-sign-in{
+        width: 6rem;
+        height: 3rem;
+        margin-left: 1rem;
+    }
+}
