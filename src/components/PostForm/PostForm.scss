@@ -16,6 +16,20 @@
     height: 3rem;
     margin-left: 1rem;
 }
+.PostForm__popup{
+    .video-input{
+        background: #0E1619;
+        color: #CBF4FA;
+        &::placeholder{
+            color: #CBF4FA;
+        }
+    }
+    #videoCategory{
+        background: #0E1619;
+        color: #CBF4FA;
+
+    }
+}
 @include tablet{
 
     .PostForm__OBS-server{

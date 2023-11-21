@@ -6,6 +6,7 @@ import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom"
 import bcrypt from "bcryptjs"
+import Select from "react-select";
 
 
 /*  */
@@ -16,10 +17,9 @@ function PostForm() {
     const navigate = useNavigate();
     const location = useLocation()
     const state = location.state
-    
-    const sessionState= sessionStorage.getItem('oauth2-state')
-    console.log(sessionState)
-    console.log(state)
+
+    const sessionState = sessionStorage.getItem('oauth2-state')
+
     const [params, setParams] = useState(JSON.parse(process.env.REACT_APP_PARAMS));
     params['state'] = state;
     const [open, setOpen] = useState(false);
@@ -28,11 +28,22 @@ function PostForm() {
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     const [store, setStore] = useState([]);
 
-    console.log(state)
+        const [selectedCategory, setSelectedCategory] = useState('23');
+        const [categories, setCategories] = useState([]);
+        const handleCategorySelection = (selectedOption) => {
+          setSelectedCategory(selectedOption);
+        };
+        console.log(sessionStorage.getItem('jwt'))
+
     ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
     useEffect(() => {
+
         setStore(params)
+        if (typeof (state) === 'string') {
+            sessionStorage.setItem('oauth2-state', state)
+        }
+
         const fragmentString = window.location.hash.substring(1);
         // Parse query string to see if page request is coming from OAuth 2.0 server.
         let regex = /([^&=]+)=([^&]*)/g, m;
@@ -48,10 +59,9 @@ function PostForm() {
         // Parameters to pass to OAuth 2.0 endpoint.
     }, [])
     async function verifyState(stateToCheck) {
-        
+
         if (stateToCheck) {
-            const sessionState= sessionStorage.getItem('oauth2-state')
-            console.log(sessionState)
+            const sessionState = sessionStorage.getItem('oauth2-state')
             return await bcrypt.compare(stateToCheck, sessionState).then((response) => {
                 return response
             })
@@ -61,11 +71,8 @@ function PostForm() {
     async function trySampleRequest(e) {
         setParams(JSON.parse(localStorage.getItem('oauth2-test-params')));
         setStore(params)
-        console.log(store)
-        console.log(params)
-        console.log(state)
         const stateIsValid = verifyState(params['state'])
-        if (params && params['access_token'] && stateIsValid==='true') {
+        if (params && params['access_token'] && stateIsValid === 'true') {
             const xhr = new XMLHttpRequest();
             xhr.open('POST',
                 'https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&' +
@@ -101,17 +108,18 @@ function PostForm() {
     /////Function to post the video to Youtube//////////////////////////////////////////////
     async function popupHandler(e) {
         e.preventDefault()
+        const token = sessionStorage.getItem('jwt');
         const snippetData = {
             title: e.target['video-title'].value,
             description: e.target['video-description'].value,
-            tags: ['tag1', 'tag2'],
-            categoryId: '22'
+            tags: [`${e.target['video-tag1']}`, `${e.target['video-tag2']}`],
+            categoryId: selectedCategory.value
 
         }
         setParams(store)
         await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
             headers: {
-                'Authorization': `Bearer ${store['access_token']}`,
+                'Authorization': `Bearer ${store['access_token']} ${token}`,
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
@@ -124,11 +132,24 @@ function PostForm() {
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
+        const token = sessionStorage.getItem('jwt');
+        await axios.get("http://localhost:3000/api/auth",{
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }).then((response)=>{
+            setCategories(response.data)
+           
+        }).catch((err)=>{
+            console.log(err+" error getting youtube vid categories")
+        })
         await obs.connect(`ws://${url}:${port}`, password).then((response) => {
+           
             alert("Successfully connected to the server");
         }).catch((err) => {
             console.log(err)
-            alert("error connecting to OBS-Websocket Server");
+            alert("error connecting to OBS-Websocket Server; check your websocket server credentials");
         });
         const recordingFolder = await obs.call('GetRecordDirectory')
 
@@ -163,12 +184,27 @@ function PostForm() {
         <form method="POST" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
             <button type="submit" className="YT-sign-in" >Sign in to YT</button>
         </form>
-
+        
         <Popup open={open} position="center center" closeOnDocumentClick={false}>
-            <form className="postForm__popup" onSubmit={(event) => popupHandler(event)}>
+            
+            <form className="PostForm__popup" onSubmit={(event) => popupHandler(event)}>
                 <button onClick={() => setOpen(false)}>Close</button>
-                <input type="text" name="video-title" placeholder='The title of your video'></input>
-                <input type="text" name="video-description" placeholder='The description of your video'></input>
+
+                <input type="text" name="video-title" placeholder='The title of your video' className="video-input"></input>
+                <input type="text" name="video-description" placeholder='The description of your video' className="video-input"></input>
+                <input type="text" name="video-tag1" placeholder='A tag for your video' className="video-input"></input>
+                <input type="text" name="video-tag2" placeholder='A tag for your video' className="video-input"></input>
+                <Select
+                    id="videoCategory"
+                    name="category"
+                    options={categories}
+                    defaultValue={'22'}
+                    onChange={handleCategorySelection}
+                    placeholder="Select a category"
+                    className="video-input"
+                    required
+                />
+                <label htmlFor="videoCategory"></label>
                 <button type="submit">Post Video to Youtube</button>
             </form>
         </Popup>

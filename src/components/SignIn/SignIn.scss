@@ -30,12 +30,19 @@
 .popup-content{
     width: 100%;
     height: fit-content;
-    background: #CBF4FA;
+    background: #0E1619;
 }
 
 .signup__popup {
-    background: #CBF4FA;
+    background: #0E1619;
     width: 100%;
+    .signup-input{
+        background: #0E1619;
+        color: #CBF4FA;
+        &::placeholder{
+            color: #CBF4FA;
+        }
+    }
     
     .signup__popup--saveDir {
         
