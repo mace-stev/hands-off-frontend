@@ -27,7 +27,8 @@
     @include button;
     display: block;
 }
-.popup-content{
+
+.popup-content {
     width: 100%;
     height: fit-content;
     background: #0E1619;
@@ -36,16 +37,28 @@
 .signup__popup {
     background: #0E1619;
     width: 100%;
-    .signup-input{
+
+    .signup-input {
         background: #0E1619;
         color: #CBF4FA;
-        &::placeholder{
+
+        &::placeholder {
             color: #CBF4FA;
         }
     }
-    
-    .signup__popup--saveDir {
-        
 
+}
+
+@include tablet {
+    .sign-in-form {
+        & .sign-in-form__username {
+            margin: 2rem auto;
+            width: 75%;
+        }
+
+        & .sign-in-form__password {
+            margin: 2rem auto;
+            width: 75%;
+        }
     }
 }

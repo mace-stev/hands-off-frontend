@@ -11,3 +11,14 @@
         }
     }
 }
+@include tablet{
+    .home {
+        .home__about-section {
+            margin: 2rem;
+    
+            .home__list {
+                font-style: italic;
+            }
+        }
+    }
+}

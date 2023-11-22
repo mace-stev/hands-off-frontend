@@ -58,6 +58,15 @@ function PostForm() {
         }
         // Parameters to pass to OAuth 2.0 endpoint.
     }, [])
+    useEffect(()=>{
+        const obs_form=document.querySelector('.PostForm__OBS-server')
+        const yt_button=document.querySelector('.YT-sign-in')
+        if(store['access_token']){
+            obs_form.classList.remove('hidden')
+            yt_button.classList.add('hidden')
+
+        }
+    },[store['access_token']])
     async function verifyState(stateToCheck) {
 
         if (stateToCheck) {
@@ -169,7 +178,7 @@ function PostForm() {
     }
 
     return (<>
-        <form className="PostForm__OBS-server" onSubmit={(e) => {
+        <form className="PostForm__OBS-server hidden" onSubmit={(e) => {
             e.preventDefault()
             console.log(e.target['server-url'].value)
             OBS(e.target['server-port'].value, e.target['server-url'].value, e.target['server-password'].value)
