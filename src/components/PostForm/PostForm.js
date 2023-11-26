@@ -190,14 +190,14 @@ function PostForm() {
             <input type='text' name='server-password' placeholder="password" required></input>
             <button type='submit' className="PostForm__OBS--submit">Connect To OBS</button>
         </form>
-        <form method="POST" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
+        <form method="POST" className="YT-sign-in-form" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
             <button type="submit" className="YT-sign-in" >Sign in to YT</button>
         </form>
         
         <Popup open={open} position="center center" closeOnDocumentClick={false}>
             
             <form className="PostForm__popup" onSubmit={(event) => popupHandler(event)}>
-                <button onClick={() => setOpen(false)}>Close</button>
+                <button className="PostForm__popup--close" onClick={() => setOpen(false)}>Close</button>
 
                 <input type="text" name="video-title" placeholder='The title of your video' className="video-input"></input>
                 <input type="text" name="video-description" placeholder='The description of your video' className="video-input"></input>
@@ -217,6 +217,14 @@ function PostForm() {
                 <button type="submit">Post Video to Youtube</button>
             </form>
         </Popup>
+        <ol className="PostForm__instructions">
+            <li>Sign in to Youtube</li>
+            <li>Connect your OBS WebSocket Server; located in the tools section of OBS</li>
+            <li>Start your stream</li>
+            <li>Once you end your stream, return to this page</li>
+            <li>Add and submit your video details to the pop-up</li>
+            <li>Your video should now be uploaded.</li>
+        </ol>
 
     </>)
 }

@@ -8,6 +8,7 @@
     padding-left: 1rem;
     background-color:#CBF4FA;
     color: #0E1619;
+    @content;
 }
 @mixin button{
         height: 2rem;

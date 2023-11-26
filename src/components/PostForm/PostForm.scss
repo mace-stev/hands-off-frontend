@@ -4,37 +4,70 @@
 .PostForm__OBS-server{
     padding: 1rem;
     display:block;
+    text-align:center;
     &.hidden{
         display:none;
     }
     & input{
         @include textInput;
+        margin: 2rem auto;
+        width: 75%;
     }
 .PostForm__OBS--submit{
     height: 3rem;
     width: 100%;
+    border-radius: 1rem;
+    background: #0E1619;
+    border: 5px solid #CBF4FA;
+    color: #CBF4FA;
 }
 }
+.YT-sign-in-form{
+    text-align: center;
+    margin: 5rem 0;
 .YT-sign-in{
-    width: 6rem;
+    width: 50%;
     height: 3rem;
     margin-left: 1rem;
+    background: #0E1619;
+    color: #CBF4FA;
+    border: 5px solid #CBF4FA;
+    border-radius: 1rem;
     &.hidden{
         display:none;
     }
 }
+}
 .PostForm__popup{
+    text-align: center;
     .video-input{
         background: #0E1619;
         color: #CBF4FA;
+        width: 75%;
         &::placeholder{
             color: #CBF4FA;
         }
     }
     #videoCategory{
         background: #0E1619;
-        color: #CBF4FA;
+        color: #0E1619;
+        margin: auto;
+        
 
+    }
+    .PostForm__popup--close{
+        position: absolute;
+        right: 0;
+    }
+}
+.PostForm__instructions{
+    margin:auto;
+    width: 75%;
+    font-size: 1.5rem;
+    & li{
+        border: solid 1px #CBF4FA;
+        border-radius: 1rem;
+        padding-left: .5rem;
     }
 }
 @include tablet{

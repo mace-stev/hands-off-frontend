@@ -26,7 +26,8 @@ function SignIn() {
             console.log(response)
             alert('Profile Created')
         }).catch((err)=>{
-            console.log(err+" error creating profile.")
+           
+            alert(err+":"+err.response.data)
         })
     }
     function signinHandler(e) {
