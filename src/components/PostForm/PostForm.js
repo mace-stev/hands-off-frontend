@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs"
 import Select from "react-select";
 
 
+
 /*  */
 
 const obs = new OBSWebSocket();
@@ -148,8 +149,46 @@ function PostForm() {
                 'Content-Type': 'application/json'
             }
         }).then((response)=>{
-            setCategories(response.data)
-           
+            setCategories(response.data['categories'])
+            if(!url&&!port){
+                url=response.data['obsUrl']
+                port=response.data['obsPort']
+                console.log(url)
+            }
+            else if(url&&url!==response.data['obsUrl']&&port&&port!==response.data['obsPort']){
+                axios.put(`http://localhost:3000/api/profile`,{'obsUrl': url,
+            'obsPort': port},{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .catch((err)=>{
+                    console.log(err+" error saving Obs Url")
+                })
+            }
+            else if(url&&url!==response.data['obsUrl']){
+                axios.put(`http://localhost:3000/api/profile`,{'obsUrl': url},{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .catch((err)=>{
+                    console.log(err+" error saving Obs Url")
+                })
+            }
+            else if(port&&port!==response.data['obsPort']){
+                axios.put(`http://localhost:3000/api/profile`,{'obsPort': port},{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .catch((err)=>{
+                    console.log(err+" error saving Obs Port")
+                })
+            }
         }).catch((err)=>{
             console.log(err+" error getting youtube vid categories")
         })
@@ -185,9 +224,9 @@ function PostForm() {
         }}>
             <h1>Connect To Your OBS Server</h1>
 
-            <input type='text' name='server-port' placeholder="port" required></input>
-            <input type='text' name='server-url' placeholder="url" required></input>
-            <input type='text' name='server-password' placeholder="password" required></input>
+            <input type='text' name='server-port' placeholder="port"></input>
+            <input type='text' name='server-url' placeholder="url"></input>
+            <input type='password' name='server-password' placeholder="password" required></input>
             <button type='submit' className="PostForm__OBS--submit">Connect To OBS</button>
         </form>
         <form method="POST" className="YT-sign-in-form" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
