@@ -193,7 +193,7 @@ function PostForm() {
         }).catch((err)=>{
             console.log(err+" error getting youtube vid categories")
         })
-        await obs.connect(`ws://${url}:${port}`, password).then((response) => {
+        await obs.connect(`wss://${url}:${port}`, password).then((response) => {
            
             alert("Successfully connected to the server");
         }).catch((err) => {
