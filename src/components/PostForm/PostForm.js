@@ -18,9 +18,12 @@ function PostForm() {
     const navigate = useNavigate();
     const location = useLocation()
     const state = location.state
-    const appUrl=process.env.APP_URL || "http://localhost:3000"
-    const sessionState = sessionStorage.getItem('oauth2-state')
 
+    const [appUrl, setAppUrl]=useState('http://localhost:3000')
+    const sessionState = sessionStorage.getItem('oauth2-state')
+    if(process.env.APP_URL){
+        setAppUrl('https://www.hands-off.app')
+    }
     const [params, setParams] = useState(JSON.parse(process.env.REACT_APP_PARAMS));
     params['state'] = state;
     const [open, setOpen] = useState(false);
