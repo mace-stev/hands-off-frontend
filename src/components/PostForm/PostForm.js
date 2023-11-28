@@ -18,7 +18,7 @@ function PostForm() {
     const navigate = useNavigate();
     const location = useLocation()
     const state = location.state
-
+    const appUrl=process.env.APP_URL || "http://localhost:3000"
     const sessionState = sessionStorage.getItem('oauth2-state')
 
     const [params, setParams] = useState(JSON.parse(process.env.REACT_APP_PARAMS));
@@ -127,7 +127,7 @@ function PostForm() {
 
         }
         setParams(store)
-        await axios.post(`http://localhost:3000/api`, { recordingFolder, params, snippetData }, {
+        await axios.post(`${appUrl}/api`, { recordingFolder, params, snippetData }, {
             headers: {
                 'Authorization': `Bearer ${store['access_token']} ${token}`,
                 'Content-Type': 'application/json'
@@ -143,7 +143,7 @@ function PostForm() {
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
         const token = sessionStorage.getItem('jwt');
-        await axios.get("http://localhost:3000/api/auth",{
+        await axios.get(`${appUrl}/api/auth`,{
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -156,7 +156,7 @@ function PostForm() {
                 console.log(url)
             }
             else if(url&&url!==response.data['obsUrl']&&port&&port!==response.data['obsPort']){
-                axios.put(`http://localhost:3000/api/profile`,{'obsUrl': url,
+                axios.put(`${appUrl}/api/profile`,{'obsUrl': url,
             'obsPort': port},{
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -168,7 +168,7 @@ function PostForm() {
                 })
             }
             else if(url&&url!==response.data['obsUrl']){
-                axios.put(`http://localhost:3000/api/profile`,{'obsUrl': url},{
+                axios.put(`${appUrl}/api/profile`,{'obsUrl': url},{
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -179,7 +179,7 @@ function PostForm() {
                 })
             }
             else if(port&&port!==response.data['obsPort']){
-                axios.put(`http://localhost:3000/api/profile`,{'obsPort': port},{
+                axios.put(`${appUrl}/api/profile`,{'obsPort': port},{
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'

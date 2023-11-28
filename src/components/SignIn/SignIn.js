@@ -10,7 +10,7 @@ import "./SignIn.scss"
 
 function SignIn() {
     const state = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)+ Math.random().toString(36).slice(2)+ Math.random().toString(36).slice(2);
-   
+    const appUrl=process.env.APP_URL || "http://localhost:3000"
     const [open, setOpen] = useState(false);
     const location = useLocation()
     const navigate = useNavigate()
@@ -19,7 +19,7 @@ function SignIn() {
 
     function popupHandler(e) {
         e.preventDefault()
-        axios.post('http://localhost:3000/api/profile',{
+        axios.post(`${appUrl}/api/profile`,{
             username: e.target['username'].value,
             password: e.target['password'].value
         }).then((response)=>{
@@ -33,7 +33,7 @@ function SignIn() {
     function signinHandler(e) {
         e.preventDefault()
         
-        axios.post('http://localhost:3000/api/auth',{
+        axios.post(`${appUrl}/api/auth`,{
             username: e.target['username'].value,
             password: e.target['password'].value,
             stateToHash: state
