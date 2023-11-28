@@ -19,7 +19,7 @@ function SignIn() {
 
     function popupHandler(e) {
         e.preventDefault()
-        axios.post(`${appUrl}/api/profile`,{
+        axios.post(`/api/profile`,{
             username: e.target['username'].value,
             password: e.target['password'].value
         }).then((response)=>{
@@ -33,7 +33,7 @@ function SignIn() {
     function signinHandler(e) {
         e.preventDefault()
         
-        axios.post(`${appUrl}/api/auth`,{
+        axios.post(`/api/auth`,{
             username: e.target['username'].value,
             password: e.target['password'].value,
             stateToHash: state

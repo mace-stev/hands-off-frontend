@@ -128,7 +128,7 @@ function PostForm() {
 
         }
         setParams(store)
-        await axios.post(`${appUrl}/api`, { recordingFolder, params, snippetData }, {
+        await axios.post(`/api`, { recordingFolder, params, snippetData }, {
             headers: {
                 'Authorization': `Bearer ${store['access_token']} ${token}`,
                 'Content-Type': 'application/json'
@@ -144,7 +144,7 @@ function PostForm() {
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
         const token = sessionStorage.getItem('jwt');
-        await axios.get(`${appUrl}/api/auth`,{
+        await axios.get(`/api/auth`,{
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -157,7 +157,7 @@ function PostForm() {
                 console.log(url)
             }
             else if(url&&url!==response.data['obsUrl']&&port&&port!==response.data['obsPort']){
-                axios.put(`${appUrl}/api/profile`,{'obsUrl': url,
+                axios.put(`/api/profile`,{'obsUrl': url,
             'obsPort': port},{
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -169,7 +169,7 @@ function PostForm() {
                 })
             }
             else if(url&&url!==response.data['obsUrl']){
-                axios.put(`${appUrl}/api/profile`,{'obsUrl': url},{
+                axios.put(`/api/profile`,{'obsUrl': url},{
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -180,7 +180,7 @@ function PostForm() {
                 })
             }
             else if(port&&port!==response.data['obsPort']){
-                axios.put(`${appUrl}/api/profile`,{'obsPort': port},{
+                axios.put(`/api/profile`,{'obsPort': port},{
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
