@@ -10,11 +10,11 @@ import "./SignIn.scss"
 
 function SignIn() {
     const state = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)+ Math.random().toString(36).slice(2)+ Math.random().toString(36).slice(2);
-    const appUrl=process.env.APP_URL
+    const appUrl=process.env.REACT_APP_APP_URL
     const [open, setOpen] = useState(false);
     const location = useLocation()
     const navigate = useNavigate()
-    console.log(process.env.APP_URL)
+   
    
 
     function popupHandler(e) {
