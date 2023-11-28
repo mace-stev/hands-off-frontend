@@ -19,7 +19,7 @@ function PostForm() {
     const location = useLocation()
     const state = location.state
 
-    const appUrl=process.env.APP_URL
+    const appUrl=process.env.REACT_APP_APP_URL
     const sessionState = sessionStorage.getItem('oauth2-state')
     
     const [params, setParams] = useState(JSON.parse(process.env.REACT_APP_PARAMS));
