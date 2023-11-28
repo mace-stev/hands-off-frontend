@@ -10,13 +10,11 @@ import "./SignIn.scss"
 
 function SignIn() {
     const state = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)+ Math.random().toString(36).slice(2)+ Math.random().toString(36).slice(2);
-    const [appUrl, setAppUrl]=useState('http://localhost:3000')
+    const appUrl=process.env.APP_URL
     const [open, setOpen] = useState(false);
     const location = useLocation()
     const navigate = useNavigate()
-    if(process.env.APP_URL){
-        setAppUrl('https://www.hands-off.app')
-    }
+    console.log(process.env.APP_URL)
    
 
     function popupHandler(e) {
