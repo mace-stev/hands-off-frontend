@@ -196,6 +196,7 @@ function PostForm() {
           });
         } catch (error) {
           console.error(error);
+          console.log(error)
           alert('Error connecting to OBS-Websocket Server; check your websocket server credentials');
         }
       }
