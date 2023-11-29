@@ -143,79 +143,62 @@ function PostForm() {
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
     async function OBS(port, url, password) {
-        const token = sessionStorage.getItem('jwt');
-        await axios.get(`/api/auth`,{
+        try {
+          const token = sessionStorage.getItem('jwt');
+      
+          const response = await axios.get(`/api/auth`, {
             headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+      
+          setCategories(response.data['categories']);
+      
+          if (!url && !port) {
+            url = response.data['obsUrl'];
+            port = response.data['obsPort'];
+          } else if (url && url !== response.data['obsUrl'] && port && port !== response.data['obsPort']) {
+            await axios.put(`/api/profile`, { obsUrl: url, obsPort: port }, {
+              headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+              },
+            });
+          } else if (url && url !== response.data['obsUrl']) {
+            await axios.put(`/api/profile`, { obsUrl: url }, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+          } else if (port && port !== response.data['obsPort']) {
+            await axios.put(`/api/profile`, { obsPort: port }, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+          };
+          await obs.connect(`wss://${url}:${port}`, password);
+          alert('Successfully connected to the server');
+      
+          const recordingFolder = await obs.call('GetRecordDirectory');
+      
+          obs.on('StreamStateChanged', (data) => {
+            if (data.outputState === 'OBS_WEBSOCKET_OUTPUT_STOPPING') {
+              setOpen(true);
+              const tempStore = Object.values(recordingFolder);
+              setRecordingFolder(tempStore[0]);
+      
+              // open is the state variable used to trigger the popup.
             }
-        }).then((response)=>{
-            setCategories(response.data['categories'])
-            if(!url&&!port){
-                url=response.data['obsUrl']
-                port=response.data['obsPort']
-                console.log(url)
-            }
-            else if(url&&url!==response.data['obsUrl']&&port&&port!==response.data['obsPort']){
-                axios.put(`/api/profile`,{'obsUrl': url,
-            'obsPort': port},{
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .catch((err)=>{
-                    console.log(err+" error saving Obs Url")
-                })
-            }
-            else if(url&&url!==response.data['obsUrl']){
-                axios.put(`/api/profile`,{'obsUrl': url},{
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .catch((err)=>{
-                    console.log(err+" error saving Obs Url")
-                })
-            }
-            else if(port&&port!==response.data['obsPort']){
-                axios.put(`/api/profile`,{'obsPort': port},{
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .catch((err)=>{
-                    console.log(err+" error saving Obs Port")
-                })
-            }
-        }).catch((err)=>{
-            console.log(err+" error getting youtube vid categories")
-        })
-        await obs.connect(`wss://${url}:${port}`, password).then((response) => {
-           
-            alert("Successfully connected to the server");
-        }).catch((err) => {
-            console.log(err)
-            alert("error connecting to OBS-Websocket Server; check your websocket server credentials");
-        });
-        const recordingFolder = await obs.call('GetRecordDirectory')
-
-
-
-        await obs.on('StreamStateChanged', (data) => {
-
-            if (data.outputState === "OBS_WEBSOCKET_OUTPUT_STOPPING") {
-                setOpen(true);
-                const tempStore = Object.values(recordingFolder)
-                setRecordingFolder(tempStore[0])
-
-                //open is the state variable used to trigger the popup.
-            }
-        })
-
-    }
+          });
+        } catch (error) {
+          console.error(error);
+          alert('Error connecting to OBS-Websocket Server; check your websocket server credentials');
+        }
+      }
 
     return (<>
         <form className="PostForm__OBS-server hidden" onSubmit={(e) => {
