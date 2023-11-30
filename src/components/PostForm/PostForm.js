@@ -180,7 +180,12 @@ function PostForm() {
               },
             });
           };
-          await obs.connect(`wss://${url}:${port}`, password);
+          await axios.post('/api/obs', {obsPort: port, obsUrl: url, password: password}, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
           alert('Successfully connected to the server');
       
           const recordingFolder = await obs.call('GetRecordDirectory');
@@ -195,8 +200,10 @@ function PostForm() {
             }
           });
         } catch (error) {
-          console.error(error);
-          console.log(error)
+          // Capture the current stack trace and attach it to the error object
+          Error.captureStackTrace(error);
+          console.error(error.stack);
+          console.log(error);
           alert('Error connecting to OBS-Websocket Server; check your websocket server credentials');
         }
       }
