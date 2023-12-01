@@ -185,10 +185,22 @@ function PostForm() {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
+          }).then((response)=>{
+            console.log(response)
+           obs.connect(response.data.completeUrl, password,response.data.response).then((response)=>{
+            console.log(response)
+              alert('Successfully connected to the server');
+            }).catch((error)=>{
+              alert(error)
+            })
+          }).catch((error)=>{
+            alert(error)
           });
-          alert('Successfully connected to the server');
+         
       
-          const recordingFolder = await obs.call('GetRecordDirectory');
+          const recordingFolder = await obs.call('GetRecordDirectory').catch((error)=>{
+            console.log(error)
+          });
       
           obs.on('StreamStateChanged', (data) => {
             if (data.outputState === 'OBS_WEBSOCKET_OUTPUT_STOPPING') {
@@ -212,12 +224,11 @@ function PostForm() {
         <form className="PostForm__OBS-server hidden" onSubmit={(e) => {
             e.preventDefault()
             console.log(e.target['server-url'].value)
-            OBS(e.target['server-port'].value, e.target['server-url'].value, e.target['server-password'].value)
+            OBS(e.target['server-port'].value, e.target['server-password'].value)
         }}>
             <h1>Connect To Your OBS Server</h1>
 
             <input type='text' name='server-port' placeholder="port"></input>
-            <input type='text' name='server-url' placeholder="url"></input>
             <input type='password' name='server-password' placeholder="password" required></input>
             <button type='submit' className="PostForm__OBS--submit">Connect To OBS</button>
         </form>
