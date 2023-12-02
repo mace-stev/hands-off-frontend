@@ -19,8 +19,8 @@ function PostForm() {
     const location = useLocation()
     const state = location.state
 
-    const appUrl=process.env.REACT_APP_APP_URL
-    const sessionState = sessionStorage.getItem('oauth2-state')
+    
+   
     
     const [params, setParams] = useState(JSON.parse(process.env.REACT_APP_PARAMS));
     params['state'] = state;
@@ -35,7 +35,7 @@ function PostForm() {
         const handleCategorySelection = (selectedOption) => {
           setSelectedCategory(selectedOption);
         };
-        console.log(sessionStorage.getItem('jwt'))
+        
 
     ////////OAuth////////////////////////////////////////////////////////////////////
     // Google's OAuth 2.0 endpoint for requesting an access token
@@ -123,12 +123,12 @@ function PostForm() {
         const snippetData = {
             title: e.target['video-title'].value,
             description: e.target['video-description'].value,
-            tags: [`${e.target['video-tag1']}`, `${e.target['video-tag2']}`],
+            tags: [`${e.target['video-tag1'].value}`, `${e.target['video-tag2'].value}`],
             categoryId: selectedCategory.value
 
         }
         setParams(store)
-        await axios.post(`/api`, { recordingFolder, params, snippetData }, {
+        await axios.post(`/api`, { recordingFolder: recordingFolder, params, snippetData }, {
             headers: {
                 'Authorization': `Bearer ${store['access_token']} ${token}`,
                 'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ function PostForm() {
     }
     ///////////////////////////////////////////////////////////////////////////
     ////////////OBS////////////////////////////////////////////////////////////
-    async function OBS(port, url, password) {
+    async function OBS(port, password) {
         try {
           const token = sessionStorage.getItem('jwt');
       
@@ -155,23 +155,8 @@ function PostForm() {
       
           setCategories(response.data['categories']);
       
-          if (!url && !port) {
-            url = response.data['obsUrl'];
+          if (!port) {
             port = response.data['obsPort'];
-          } else if (url && url !== response.data['obsUrl'] && port && port !== response.data['obsPort']) {
-            await axios.put(`/api/profile`, { obsUrl: url, obsPort: port }, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            });
-          } else if (url && url !== response.data['obsUrl']) {
-            await axios.put(`/api/profile`, { obsUrl: url }, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            });
           } else if (port && port !== response.data['obsPort']) {
             await axios.put(`/api/profile`, { obsPort: port }, {
               headers: {
@@ -179,8 +164,8 @@ function PostForm() {
                 'Content-Type': 'application/json',
               },
             });
-          };
-          await axios.post('/api/obs', {obsPort: port, obsUrl: url, password: password}, {
+          } 
+          await axios.post('/api/obs', {obsPort: port, password: password}, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -188,25 +173,23 @@ function PostForm() {
           }).then((response)=>{
             console.log(response)
            obs.connect(response.data.completeUrl, password,response.data.response).then((response)=>{
-            console.log(response)
               alert('Successfully connected to the server');
+              obs.call('GetRecordDirectory').then((response)=>{
+                const tempStore = Object.values(response);
+                  setRecordingFolder(tempStore[0]);
+              }).catch((error)=>{
+                console.log(error)
+              });
             }).catch((error)=>{
               alert(error)
             })
           }).catch((error)=>{
             alert(error)
           });
-         
-      
-          const recordingFolder = await obs.call('GetRecordDirectory').catch((error)=>{
-            console.log(error)
-          });
-      
+      console.log(recordingFolder)
           obs.on('StreamStateChanged', (data) => {
             if (data.outputState === 'OBS_WEBSOCKET_OUTPUT_STOPPING') {
               setOpen(true);
-              const tempStore = Object.values(recordingFolder);
-              setRecordingFolder(tempStore[0]);
       
               // open is the state variable used to trigger the popup.
             }
@@ -223,7 +206,6 @@ function PostForm() {
     return (<>
         <form className="PostForm__OBS-server hidden" onSubmit={(e) => {
             e.preventDefault()
-            console.log(e.target['server-url'].value)
             OBS(e.target['server-port'].value, e.target['server-password'].value)
         }}>
             <h1>Connect To Your OBS Server</h1>
