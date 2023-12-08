@@ -189,6 +189,9 @@ function PostForm() {
             })
           }).catch((error) => {
             console.log(error)
+          })
+          .catch((error)=>{
+            console.log(error)
           });
     } catch (error) {
       // Capture the current stack trace and attach it to the error object
