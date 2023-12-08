@@ -1,8 +1,11 @@
 import "./Home.scss"
 import SignIn from "../SignIn/SignIn"
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 function Home() {
     return (
         <>
+            <Navbar/>
             <SignIn />
             <section className="home">
                 <section className="home__about-section">
@@ -16,6 +19,7 @@ function Home() {
                     </ul>
                 </section>
             </section>
+            <Footer/>
         </>
     );
 }

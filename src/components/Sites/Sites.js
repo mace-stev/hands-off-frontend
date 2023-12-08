@@ -1,9 +1,12 @@
 import youtube from "../../assets/youtube-logo.png";
 import twitch from "../../assets/twitch_logo.webp"
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import "./Sites.scss"
 function Sites() {
     return (
         <>
+            <Navbar/>
             <section className="sites">
             <h1 className="sites-title">Sites and Requirements</h1>
             <h2>Sites:</h2>
@@ -17,6 +20,7 @@ function Sites() {
                 <h3>Required:</h3>
                 <p>Currently in order for this to work you need to use <span><a href="https://obsproject.com/download">OBS Studio</a></span></p>
             </section>
+            <Footer/>
     </>
     )
 }

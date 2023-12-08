@@ -1,6 +1,8 @@
 import PostForm from "../PostForm/PostForm";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 function RouteProtection(){
     const navigate = useNavigate()
     const token = sessionStorage.getItem('jwt');
@@ -15,7 +17,10 @@ if(!token){
 },[])
 
 
-return(<><PostForm/>
+return(<>
+<Navbar/>
+<PostForm/>
+<Footer/>
     </>)
 
 }
