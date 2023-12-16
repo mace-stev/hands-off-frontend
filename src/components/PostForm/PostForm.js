@@ -177,16 +177,23 @@ function PostForm() {
           const tempStore = Object.values((response.data));
           console.log(tempStore)
             setRecordingFolder(tempStore[0]);
-            return axios.post('/api/obs/stream', {},{
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-            }).then((response)=>{
-              
-              setOpen(true)
-            })
+            console.log('hi')
+            const eventSource = new EventSource('/api/obs/stream');
+            
+            eventSource.onmessage = (event) => {
+              console.log(event)
+              console.log(event.data)
+              const parts = event.data.split('\n');
+              const eventType = parts[0].split(':')[0];
+          
+            
+              if (eventType === 'streamStopped') {
+                setOpen(true);
+              }
+            console.log(parts)
+             
+            };
+            
           }).catch((error) => {
             console.log(error)
           })
