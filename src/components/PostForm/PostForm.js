@@ -1,5 +1,4 @@
 import "./PostForm.scss";
-import OBSWebSocket from 'obs-websocket-js';
 import Popup from 'reactjs-popup';
 import { useState, useEffect } from 'react';
 import 'reactjs-popup/dist/index.css';
@@ -18,7 +17,7 @@ function PostForm() {
   const navigate = useNavigate();
   const location = useLocation()
   const state = location.state
-  const obs = new OBSWebSocket();
+  
 
 
 
@@ -142,7 +141,7 @@ function PostForm() {
   }
   ///////////////////////////////////////////////////////////////////////////
   ////////////OBS////////////////////////////////////////////////////////////
-  async function OBS(port, password) {
+  async function OBS(domain, password) {
     try {
       const token = sessionStorage.getItem('jwt');
 
@@ -155,17 +154,17 @@ function PostForm() {
 
       setCategories(response.data['categories']);
 
-      if (!port) {
-        port = response.data['obsPort'];
-      } else if (port && port !== response.data['obsPort']) {
-        await axios.put(`/api/profile`, { obsPort: port }, {
+      if (!domain) {
+        domain = response.data['obsDomain'];
+      } else if (domain && domain !== response.data['obsDomain']) {
+        await axios.put(`/api/profile`, { obsDomain: domain }, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
       }
-     await axios.post('/api/obs', { obsPort: port, password: password }, {
+     await axios.post('/api/obs', { obsDomain: domain, password: password }, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -214,11 +213,11 @@ function PostForm() {
   return (<>
     <form className="PostForm__OBS-server hidden" onSubmit={(e) => {
       e.preventDefault()
-      OBS(e.target['server-port'].value, e.target['server-password'].value)
+      OBS(e.target['server-domain'].value, e.target['server-password'].value)
     }}>
       <h1>Connect To Your OBS Server</h1>
 
-      <input type='text' name='server-port' placeholder="port"></input>
+      <input type='text' name='server-domain' placeholder="domain"></input>
       <input type='password' name='server-password' placeholder="password" required></input>
       <button type='submit' className="PostForm__OBS--submit">Connect To OBS</button>
     </form>
