@@ -18,16 +18,17 @@ function SignIn() {
    
 
     function popupHandler(e) {
-        e.preventDefault()
+      e.preventDefault()
         axios.post(`/api/profile`,{
             username: e.target['username'].value,
             password: e.target['password'].value
         }).then((response)=>{
             console.log(response)
             alert('Profile Created')
+            setOpen(false)
         }).catch((err)=>{
            
-            alert(err+":"+err.response.data)
+            alert(err.response.data)
         })
     }
     function signinHandler(e) {
@@ -58,13 +59,13 @@ function SignIn() {
             <button placeholder="Sign-up?" onClick={(e) => {
             
                 setOpen(true)
-            }} className={"signup-button"}>Sign-Up?</button>
+            }} className="signup-button">Sign-Up?</button>
             <Popup open={open} position="center center" closeOnDocumentClick={false} className="signup_popup">
                 <form className="signup__popup" onSubmit={(e) => { popupHandler(e) }}>
-                    <button onClick={() => setOpen(false)}>Close</button>
+                    <button className="signup__popup--close" onClick={() => setOpen(false)}>Close</button>
                     <input type="text" name="username" placeholder='username' className="signup-input" required></input>
                     <input type="password" name="password" placeholder='password' className="signup-input" required></input>
-                    <input type="submit" placeholder="Create Profile" className="signup-input"></input>
+                    <input type="submit" placeholder="Create Profile" className="signup-submit"></input>
                 </form>
             </Popup>
 

@@ -3,7 +3,7 @@ import Popup from 'reactjs-popup';
 import { useState, useEffect } from 'react';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, Form } from "react-router-dom"
 import bcrypt from "bcryptjs"
 import Select from "react-select";
 
@@ -17,16 +17,12 @@ function PostForm() {
   const navigate = useNavigate();
   const location = useLocation()
   const state = location.state
-  
-
-
-
-
   const [params, setParams] = useState(JSON.parse(process.env.REACT_APP_PARAMS));
   params['state'] = state;
   const [open, setOpen] = useState(false);
   const [recordingFolder, setRecordingFolder] = useState();
   const [fileName, setFileName] = useState();
+  const [lastDomain, setLastDomain]=useState();
   const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
   const [store, setStore] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('23');
@@ -59,10 +55,41 @@ function PostForm() {
     }
     // Parameters to pass to OAuth 2.0 endpoint.
   }, [])
+  useEffect(() =>{
+    
+      const token = sessionStorage.getItem('jwt');
+
+    axios.get(`/api/auth`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }).then((response)=>{
+        if(response.data['obsPort/Domain']){
+          setLastDomain(response.data['obsPort/Domain'])
+        }
+      }).catch((error)=>{
+        console.log("error getting auth route")
+      });
+     
+
+
+  },[])
   useEffect(() => {
     const obs_form = document.querySelector('.PostForm__OBS-server')
     const yt_button = document.querySelector('.YT-sign-in')
+  
     if (store['access_token']) {
+      const checkStateAndClearURL = () => {
+        // Check the state here and perform necessary actions
+      
+        // Assuming you have checked the state, and now you want to clear sensitive data from the URL
+        const newURL = window.location.href.split('#')[0];
+        window.history.replaceState({}, document.title, newURL);
+      };
+      
+      // Call the function when needed
+      checkStateAndClearURL();
       obs_form.classList.remove('hidden')
       yt_button.classList.add('hidden')
 
@@ -126,14 +153,19 @@ function PostForm() {
       categoryId: selectedCategory.value
 
     }
+    const formData= new FormData()
+    formData.append('video', e.target['video'].files[0])
+    formData.append('params', JSON.stringify(params))
+    formData.append('snippetData', JSON.stringify(snippetData))
     setParams(store)
-    await axios.post(`/api`, { recordingFolder: recordingFolder, params, snippetData }, {
+    await axios.post(`/api`, formData, {
       headers: {
         'Authorization': `Bearer ${store['access_token']} ${token}`,
-        'Content-Type': 'application/json'
+        'X-Upload-Content-Type': 'application/octet-stream'
       }
     }).then((response) => {
-      console.log(response)
+      alert("Video is successfully uploaded!");
+      setOpen(false);
 
 
     }).catch((err) => { console.log(`${err}: error sending folder/video to server or to Youtube`) })
@@ -141,7 +173,7 @@ function PostForm() {
   }
   ///////////////////////////////////////////////////////////////////////////
   ////////////OBS////////////////////////////////////////////////////////////
-  async function OBS(domain, password) {
+  async function OBS(port, password) {
     try {
       const token = sessionStorage.getItem('jwt');
 
@@ -154,17 +186,17 @@ function PostForm() {
 
       setCategories(response.data['categories']);
 
-      if (!domain) {
-        domain = response.data['obsDomain'];
-      } else if (domain && domain !== response.data['obsDomain']) {
-        await axios.put(`/api/profile`, { obsDomain: domain }, {
+      if (!port) {
+        port = response.data['obsPort/Domain'];
+      } else if (port && port !== response.data['obsPort/Domain']) {
+        axios.put(`/api/profile`, { "obsPort/Domain": port }, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        });
+        })
       }
-     await axios.post('/api/obs', { obsDomain: domain, password: password }, {
+     await axios.post('/api/obs', { "obsPort/Domain": port, password: password }, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -174,9 +206,7 @@ function PostForm() {
        alert('Sucessfully connected to OBS')
         console.log(response)
           const tempStore = Object.values((response.data));
-          console.log(tempStore)
             setRecordingFolder(tempStore[0]);
-            console.log('hi')
             const eventSource = new EventSource('/api/obs/stream');
             
             eventSource.onmessage = (event) => {
@@ -184,10 +214,14 @@ function PostForm() {
               console.log(event.data)
               const parts = event.data.split('\n');
               const eventType = parts[0].split(':')[0];
-          
-            
+          console.log(parts)
+            console.log(eventType)
               if (eventType === 'streamStopped') {
                 setOpen(true);
+              }
+              else if(eventType !== 'streamStopped'){
+                setFileName(event.data)
+                
               }
             console.log(parts)
              
@@ -207,24 +241,43 @@ function PostForm() {
       alert('Error connecting to OBS-Websocket Server');
     }
   }
+  function copyText(textId) {
+    // Get the text to copy
+    const textToCopy = document.getElementById(textId).innerText;
+
+    // Use the Clipboard API to write text to clipboard
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            console.log('Text copied to clipboard!');
+            // Optionally, provide feedback to the user
+            alert('Text copied to clipboard!');
+        })
+        .catch(err => {
+            console.error('Unable to copy text: ', err);
+        });
+}
   
 
 
   return (<>
     <form className="PostForm__OBS-server hidden" onSubmit={(e) => {
       e.preventDefault()
-      OBS(e.target['server-domain'].value, e.target['server-password'].value)
+      OBS(e.target['server-port/domain'].value, e.target['server-password'].value)
     }}>
       <h1>Connect To Your OBS Server</h1>
 
-      <input type='text' name='server-domain' placeholder="domain"></input>
+      <input type='text' name='server-port/domain' placeholder="port/domain"></input>
       <input type='password' name='server-password' placeholder="password" required></input>
       <button type='submit' className="PostForm__OBS--submit">Connect To OBS</button>
+  
     </form>
     <form method="POST" className="YT-sign-in-form" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
       <button type="submit" className="YT-sign-in" >Sign in to YT</button>
     </form>
-
+    <section className="video-copy__container">
+        <button className="video-copy__button"onClick={()=>{copyText("last-domain/port")}}>Copy Last Domain/Port</button>
+        <h3 id="last-domain/port">{lastDomain}</h3>
+        </section>
     <Popup open={open} position="center center" closeOnDocumentClick={false}>
 
       <form className="PostForm__popup" onSubmit={(event) => popupHandler(event)}>
@@ -244,13 +297,18 @@ function PostForm() {
           className="video-input"
           required
         />
+        <input type="file" name="video"></input>
+        <section className="video-copy__container">
+        <button className="video-copy__button"onClick={()=>{copyText("textToCopy")}}>Copy Path</button>
+        <h3 id="textToCopy">{fileName}</h3>
+        </section>
         <label htmlFor="videoCategory"></label>
         <button type="submit">Post Video to Youtube</button>
       </form>
     </Popup>
     <ol className="PostForm__instructions">
       <li>Sign in to Youtube</li>
-      <li>Connect your OBS WebSocket Server; located in the tools section of OBS</li>
+      <li>Enable and connect your OBS WebSocket Server; located in the tools section of OBS under "WebSocket Server Settings"</li>
       <li>Start your stream</li>
       <li>Once you end your stream, return to this page</li>
       <li>Add and submit your video details to the pop-up</li>

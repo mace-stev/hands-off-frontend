@@ -10,10 +10,21 @@
     color: #0E1619;
     @content;
 }
+@mixin copyContainer{
+    display: flex;
+    justify-content: center;
+@content;
+}
+@mixin copyButton{
+    height: 1.5rem;
+    margin-top: 1.25rem;
+    margin-right: .25rem;
+    @content;
+}
 @mixin button{
         height: 2rem;
         width:50%;
-        border: 5px solid #CBF4FA;
+        border: 3px solid #CBF4FA;
         background: #0E1619;
         color: #CBF4FA;
         border-radius: 10%;

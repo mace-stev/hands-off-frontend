@@ -20,6 +20,7 @@
     background: #0E1619;
     border: 5px solid #CBF4FA;
     color: #CBF4FA;
+    margin-bottom: 1rem;
 }
 }
 .YT-sign-in-form{
@@ -38,6 +39,14 @@
     }
 }
 }
+.video-copy__container{
+    @include copyContainer;
+    text-align:center;
+    .video-copy__button{
+
+     @include copyButton;
+    }
+}
 .PostForm__popup{
     text-align: center;
     .video-input{
@@ -54,6 +63,13 @@
         margin: auto;
         
 
+    }
+    .video-copy__container{
+        @include copyContainer;
+        .video-copy__button{
+
+         @include copyButton;
+        }
     }
     .PostForm__popup--close{
         position: absolute;
