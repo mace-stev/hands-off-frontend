@@ -1,6 +1,6 @@
 import "./PostForm.scss";
 import Popup from 'reactjs-popup';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
 import { useNavigate, useLocation, Form } from "react-router-dom"
@@ -27,6 +27,7 @@ function PostForm() {
   const [store, setStore] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('23');
   const [categories, setCategories] = useState([]);
+  const textRef = useRef(null);
   const handleCategorySelection = (selectedOption) => {
     setSelectedCategory(selectedOption);
   };
@@ -210,17 +211,17 @@ function PostForm() {
             const eventSource = new EventSource('/api/obs/stream');
             
             eventSource.onmessage = (event) => {
-              console.log(event)
-              console.log(event.data)
+            
               const parts = event.data.split('\n');
               const eventType = parts[0].split(':')[0];
-          console.log(parts)
-            console.log(eventType)
+         
               if (eventType === 'streamStopped') {
                 setOpen(true);
               }
               else if(eventType !== 'streamStopped'){
-                setFileName(event.data)
+                const file=event.data
+                
+                setFileName(normalizePathForWindows(file))
                 
               }
             console.log(parts)
@@ -241,20 +242,35 @@ function PostForm() {
       alert('Error connecting to OBS-Websocket Server');
     }
   }
-  function copyText(textId) {
+  function copyText() {
     // Get the text to copy
-    const textToCopy = document.getElementById(textId).innerText;
+   
+    const textToCopy = textRef.current.innerText;
+    
+    const tempTextarea = document.createElement('textarea');
+    tempTextarea.value = textToCopy;
 
-    // Use the Clipboard API to write text to clipboard
-    navigator.clipboard.writeText(textToCopy)
-        .then(() => {
-            console.log('Text copied to clipboard!');
-            // Optionally, provide feedback to the user
-            alert('Text copied to clipboard!');
-        })
-        .catch(err => {
-            console.error('Unable to copy text: ', err);
-        });
+    document.body.appendChild(tempTextarea);
+
+    // Select the text in the textarea
+    tempTextarea.select();
+
+    // Execute the copy command
+    document.execCommand('copy');
+
+    // Remove the temporary textarea
+    document.body.removeChild(tempTextarea);
+  
+    alert('Text copied to clipboard!');
+        
+    
+}
+function normalizePathForWindows(path) {
+  if ((/^[A-Z]:/i).test(path)) {
+    return path.replace(/\//g, '\\'); // Replace forward slashes with backslashes
+  } else {
+    return path; // Keep the path as-is for non-Windows systems
+  }
 }
   
 
@@ -276,7 +292,7 @@ function PostForm() {
     </form>
     <section className="video-copy__container">
         <button className="video-copy__button"onClick={()=>{copyText("last-domain/port")}}>Copy Last Domain/Port</button>
-        <h3 id="last-domain/port">{lastDomain}</h3>
+        <h3 id="last-domain/port" ref={textRef}>{lastDomain}</h3>
         </section>
     <Popup open={open} position="center center" closeOnDocumentClick={false}>
 
@@ -299,8 +315,8 @@ function PostForm() {
         />
         <input type="file" name="video"></input>
         <section className="video-copy__container">
-        <button className="video-copy__button"onClick={()=>{copyText("textToCopy")}}>Copy Path</button>
-        <h3 id="textToCopy">{fileName}</h3>
+        <button className="video-copy__button"onClick={()=>{copyText()}}>Copy Path</button>
+        <h3 id="textToCopy" ref={textRef}>{fileName}</h3>
         </section>
         <label htmlFor="videoCategory"></label>
         <button type="submit">Post Video to Youtube</button>

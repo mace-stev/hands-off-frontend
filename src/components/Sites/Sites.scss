@@ -3,40 +3,81 @@
 @use "../../styles/partials/mixins" as *;
 
 .sites {
-    .sites-title__container{
-        margin: 0 2rem;
+    .sites-title__container {
+        margin: 0 1rem;
     }
-    .sites-logo {
-        height: 8rem;
-        width: 100%;
-        margin: 1rem 0;
+
+    .sites-logo__container {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem;
+
+        .sites-logo {
+            height: 8rem;
+            width: 100%;
+
+        }
     }
 
     .requirements {
+        margin-left: 1rem;
     }
-        .website-guide {
-            text-align: center;
-            border-top: solid 1px #CBF4FA;
 
-            .website-guide__list {
-                list-style: none;
-            }
+    .website-guide {
+        text-align: center;
+        border-top: solid 1px #CBF4FA;
 
-            .tutorial__slider {
-                width: 75%;
+        .website-guide__list {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: bold;
+            color: #CBF4FA;
+        }
+
+        & form {
+            margin-top: 1rem;
+
+            & .tutorial__slider {
+                width: 90%;
                 text-align: center;
                 overflow: hidden;
                 margin: auto;
+
+                & a {
+                    display: inline-flex;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    background: white;
+                    text-decoration: none;
+                    align-items: center;
+                    color: #0E1619;
+                    justify-content: center;
+                    border-radius: 50%;
+                    margin: 0 0 0.5rem 0;
+                    position: relative;
+
+                    &.active {
+                        background: #0E1619;
+                        color: #CBF4FA;
+                    }
+                }
             }
 
-            .tutorial__slides {
+            & .tutorial__slides {
                 display: flex;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
                 scroll-behavior: smooth;
                 -webkit-overflow-scrolling: touch;
-                height: 15rem;
+                height: 20rem;
                 margin-bottom: 2rem;
+
+                & a {
+                    background: none;
+                    width: fit-content;
+                }
             }
 
             .tutorial__slides::-webkit-scrollbar {
@@ -68,7 +109,173 @@
                 border: 1px solid white;
                 justify-content: center;
                 align-items: center;
-                font-size: 1rem;
+                font-size: .75rem;
+
+                & li {
+                    margin: 1.5rem auto;
+                    letter-spacing: 2px;
+                }
+            }
+
+            .author-info {
+                background: rgba(0, 0, 0, 0.75);
+                color: white;
+                padding: 0.75rem;
+                text-align: center;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                margin: 0;
+            }
+
+            .author-info a {
+                color: white;
+            }
+
+            img {
+                object-fit: cover;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+
+
+        #ngrok-config-file {
+            display: flex;
+
+            & ul {
+                width: 50%;
+
+            }
+
+            #ngrok-config {
+                margin-top: 0;
+
+                pre {
+                    margin: 0;
+                }
+            }
+        }
+
+
+        .sites__input {
+            @include textInput;
+            margin: auto;
+        }
+    }
+
+    .sites__submit {
+        @include button;
+    }
+
+    .ngrok-config-list {
+        height: 100%;
+    }
+
+    .sites-copy__container {
+
+        @include copyContainer;
+        font-size: .75rem;
+        display: block;
+        height: 100%;
+
+        .sites-copy__button {
+            @include copyButton;
+            margin-top: 1.8rem;
+        }
+    }
+}
+
+
+
+@include tablet {
+    .sites {
+        .sites-title__container {
+            margin: 0 1rem;
+        }
+
+        .sites-logo__container {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem;
+
+            & a {
+                width: 50%;
+                margin:0 1rem;
+                .sites-logo {
+                    height: 16rem;
+                    width: 100%;
+
+                }
+            }
+        }
+
+        .requirements {}
+
+        .website-guide {
+            text-align: center;
+            border-top: solid 1px #CBF4FA;
+
+            .website-guide__list {
+                list-style: none;
+            }
+
+            .tutorial__slider {
+                width: 90%;
+                text-align: center;
+                overflow: hidden;
+                margin: auto;
+            }
+
+           & .tutorial__slides {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                height: 20rem;
+                margin-bottom: 2rem;
+               & span a{
+                    color:#CBF4FA;
+                    font-weight: bold;
+                }
+            }
+
+            .tutorial__slides::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+
+            .tutorial__slides::-webkit-scrollbar-thumb {
+                background: #CBF4FA;
+                border-radius: 10px;
+            }
+
+            .tutorial__slides::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .tutorial__slides>div {
+                scroll-snap-align: start;
+                flex-shrink: 0;
+                width: 100%;
+                height: 100%;
+                margin-right: 50px;
+                border-radius: 10px;
+                background: #0E1619;
+                transform-origin: center center;
+                transform: scale(1);
+                transition: transform 0.5s;
+                position: relative;
+                border: 1px solid white;
+                justify-content: center;
+                align-items: center;
+                font-size: 1.25rem;
 
                 & li {
                     margin: 1.5rem auto;
@@ -118,7 +325,8 @@
             }
 
             .tutorial__slider>a:active {
-                top: 1px;
+                background: #0E1619;
+                color: #CBF4FA;
             }
 
             .tutorial__slider>a:focus {
@@ -141,55 +349,21 @@
                 }
             }
 
-
-            .sites__input {
-                @include textInput;
-                margin: auto;
-            }
+            .sites__input {}
         }
     }
 
-    .sites__submit {
-        @include button;
-    }
+    .sites__submit {}
+
+    .ngrok-config-list {}
 
     .sites-copy__container {
 
         @include copyContainer;
-
-        .sites-copy__button {
-            @include copyButton;
-        }
-    }
+        font-size: 1.25rem;
 
 
-@include tablet {
-    .sites {
+        .sites-copy__button {}
 
-        p {
-            font-size: 1.25rem;
-        }
-
-        .sites-logo__container {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-
-            a {
-                width: 100%;
-                margin: 1rem 0;
-                box-sizing: border-box;
-                text-align: center;
-
-                .sites-logo {
-                    height: 16rem;
-                    width: 95%;
-                    text-align: center;
-                    box-sizing: border-box;
-                }
-            }
-        }
-
-        .requirements {}
     }
 }
