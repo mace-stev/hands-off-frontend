@@ -23,7 +23,7 @@
     }
 }
 
-.signup-button {
+.signup-or-forgot__button {
     @include button;
     display: block;
 }
@@ -34,31 +34,23 @@
     background: #0E1619;
 }
 
-.signup__popup {
+.signup-or-forgot__popup {
     background: #0E1619;
     display: flex;
     flex-direction: column;
     width: 50%;
     margin: auto;
-    .signup__popup--close{
-        width:fit-content;
-        margin-right: 0;
-        margin-left: auto;
+    .signup-or-forgot__popup--close{
+        position: absolute;
+        right: 0;
     }
 
-    .signup-input {
-        background: #0E1619;
-        color: #CBF4FA;
-        border: 1px solid white;
-
-        &::placeholder {
-            color: #CBF4FA;
-        }
+    .signup-or-forgot__input {
+        @include textInput;
+      
     }
-    .signup-submit{
-        margin-top: 1rem;
-        background: #CBF4FA;
-        color: #0E1619
+    .signup-or-forgot__submit{
+        @include button;
     }
 
 }
