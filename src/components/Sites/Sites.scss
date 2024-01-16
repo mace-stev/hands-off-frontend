@@ -32,7 +32,7 @@
         }
 
         a {
-            text-decoration: bold;
+            text-decoration: none;
             color: #CBF4FA;
         }
 
@@ -202,11 +202,11 @@
         .sites-logo__container {
             display: flex;
             justify-content: space-between;
-            margin: 2rem;
+            margin: 2rem 1rem;
 
             & a {
                 width: 50%;
-                margin:0 1rem;
+                margin:0 .5rem;
                 .sites-logo {
                     height: 16rem;
                     width: 100%;
