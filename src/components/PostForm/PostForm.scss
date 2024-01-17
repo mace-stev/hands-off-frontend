@@ -43,8 +43,8 @@
     @include copyContainer;
     text-align:center;
     .video-copy__button{
-
      @include copyButton;
+     margin-bottom: 1rem;
     }
 }
 .PostForm__popup{
