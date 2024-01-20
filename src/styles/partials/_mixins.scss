@@ -19,6 +19,11 @@
     height: 1.5rem;
     margin-top: 1.25rem;
     margin-right: .25rem;
+    border: solid 4px #0E1619;
+    border-radius: 15%;
+    background:#CBF4FA;
+    color:#0E1619;
+    outline: inset #CBF4FA 1px;
     @content;
 }
 @mixin button{

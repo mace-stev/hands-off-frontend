@@ -67,12 +67,14 @@ function PrivacyPolicy(){
 <p>Usage Data</p>
 </li>
 </ul>
-<h4>Usage Data</h4>
+<strong><h4>Usage Data</h4></strong>
 <p>Usage Data is collected automatically when using the Service.</p>
 <p>Usage Data may include information such as Your Device's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
 <p>When You access the Service by or through a mobile device, We may collect certain information automatically, including, but not limited to, the type of mobile device You use, Your mobile device unique ID, the IP address of Your mobile device, Your mobile operating system, the type of mobile Internet browser You use, unique device identifiers and other diagnostic data.</p>
 <p>We may also collect information that Your browser sends whenever You visit our Service or when You access the Service by or through a mobile device.</p>
 <h4>Information from Third-Party Social Media Services</h4>
+<p>https://www.hands-off.app's use and transfer to any other app of information received from Google APIs will adhere to Google API Services User Data Policy, including the Limited Use requirements.”</p>
+<a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes">Google API Services User Data Policy</a>
 <p>The Company allows You to create an account and log in to use the Service through the following Third-party Social Media Services:</p>
 <ul>
 <li>Google</li>
@@ -113,7 +115,6 @@ function PrivacyPolicy(){
 </ul>
 <p>For more information about the cookies we use and your choices regarding cookies, please visit our Cookies Policy or the Cookies section of our Privacy Policy.</p>
 <h3>Use of Your Personal Data</h3>
-<p>The Company may use Personal Data for the following purposes:</p>
 <ul>
 <li>
 <p><strong>To provide and maintain our Service</strong>, including to monitor the usage of our Service.</p>
@@ -125,19 +126,10 @@ function PrivacyPolicy(){
 <p><strong>For the performance of a contract:</strong> the development, compliance and undertaking of the purchase contract for the products, items or services You have purchased or of any other contract with Us through the Service.</p>
 </li>
 <li>
-<p><strong>To contact You:</strong> To contact You by email, telephone calls, SMS, or other equivalent forms of electronic communication, such as a mobile application's push notifications regarding updates or informative communications related to the functionalities, products or contracted services, including the security updates, when necessary or reasonable for their implementation.</p>
-</li>
-<li>
-<p><strong>To provide You</strong> with news, special offers and general information about other goods, services and events which we offer that are similar to those that you have already purchased or enquired about unless You have opted not to receive such information.</p>
-</li>
-<li>
 <p><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</p>
 </li>
 <li>
 <p><strong>For business transfers:</strong> We may use Your information to evaluate or conduct a merger, divestiture, restructuring, reorganization, dissolution, or other sale or transfer of some or all of Our assets, whether as a going concern or as part of bankruptcy, liquidation, or similar proceeding, in which Personal Data held by Us about our Service users is among the assets transferred.</p>
-</li>
-<li>
-<p><strong>For other purposes</strong>: We may use Your information for other purposes, such as data analysis, identifying usage trends, determining the effectiveness of our promotional campaigns and to evaluate and improve our Service, products, services, marketing and your experience.</p>
 </li>
 </ul>
 <p>We may share Your personal information in the following situations:</p>
@@ -145,7 +137,6 @@ function PrivacyPolicy(){
 <li><strong>With Service Providers:</strong> We may share Your personal information with Service Providers to monitor and analyze the use of our Service,  to contact You.</li>
 <li><strong>For business transfers:</strong> We may share or transfer Your personal information in connection with, or during negotiations of, any merger, sale of Company assets, financing, or acquisition of all or a portion of Our business to another company.</li>
 <li><strong>With Affiliates:</strong> We may share Your information with Our affiliates, in which case we will require those affiliates to honor this Privacy Policy. Affiliates include Our parent company and any other subsidiaries, joint venture partners or other companies that We control or that are under common control with Us.</li>
-<li><strong>With business partners:</strong> We may share Your information with Our business partners to offer You certain products, services or promotions.</li>
 <li><strong>With other users:</strong> when You share personal information or otherwise interact in the public areas with other users, such information may be viewed by all users and may be publicly distributed outside. If You interact with other users or register through a Third-Party Social Media Service, Your contacts on the Third-Party Social Media Service may see Your name, profile, pictures and description of Your activity. Similarly, other users will be able to view descriptions of Your activity, communicate with You and view Your profile.</li>
 <li><strong>With Your consent</strong>: We may disclose Your personal information for any other purpose with Your consent.</li>
 </ul>
@@ -190,7 +181,7 @@ function PrivacyPolicy(){
 <h2>Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, You can contact us:</p>
 <ul>
-<li>By email: williamstevenson107@gmail.com</li>
+<li><a href="mailto:williamstevenson107@gmail.com">By email: williamstevenson107@gmail.com</a></li>
 </ul>
 </section>
 <Footer />

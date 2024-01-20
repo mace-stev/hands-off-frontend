@@ -288,7 +288,7 @@ function normalizePathForWindows(path) {
   
     </form>
     <form method="POST" className="YT-sign-in-form" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
-      <button type="submit" className="YT-sign-in" >Sign in to YT</button>
+      <button type="submit" className="YT-sign-in" >Sign in to YouTube</button>
     </form>
     <section className="video-copy__container">
         <button className="video-copy__button"onClick={()=>{copyText("last-domain/port")}}>Copy Last Domain/Port</button>
