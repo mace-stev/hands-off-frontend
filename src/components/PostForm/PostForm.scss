@@ -27,13 +27,21 @@
     text-align: center;
     margin: 5rem 0;
 .YT-sign-in{
-    width: 50%;
+    width: 75%;
     height: 3rem;
-    margin-left: 1rem;
     background: #0E1619;
     color: #CBF4FA;
     border: 5px solid #CBF4FA;
     border-radius: 1rem;
+    display: flex;
+    margin: auto;
+    line-height: 2.5rem;
+    text-wrap: nowrap;
+    & img{  
+        height: 1.25rem;
+        margin: auto 0.5rem auto 0.5rem;
+        display: block;
+    }
     &.hidden{
         display:none;
     }
@@ -45,6 +53,7 @@
     .video-copy__button{
      @include copyButton;
      margin-bottom: 1rem;
+     font-size: .6rem;
     }
 }
 .PostForm__popup{
@@ -66,9 +75,10 @@
     }
     .video-copy__container{
         @include copyContainer;
-        .video-copy__button{
+       & .video-copy__button{
 
          @include copyButton;
+         font-size: .6rem;
         }
     }
     .PostForm__popup--close{
@@ -96,9 +106,18 @@
         width: 50%;
     }
     }
+    .YT-sign-in-form{
     .YT-sign-in{
-        width: 6rem;
-        height: 3rem;
-        margin-left: 1rem;
+        width: 50%;
+     
+        & img{  
+
+            height: 1.5rem;
+            margin-top: auto;
+            margin-bottom: auto;
+            margin-left: 1rem;
+            margin-right: 25%;
+        }
     }
+}
 }

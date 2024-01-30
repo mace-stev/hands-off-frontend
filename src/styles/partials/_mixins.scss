@@ -1,3 +1,5 @@
+@use '../partials/variables' as *;
+
 @mixin textInput{
     height: 1.5rem;
     border-radius: 1rem;
@@ -38,8 +40,12 @@
         @content;
 }
 @mixin tablet{
-    @content;
+    @media(min-width: $tablet__breakpoint){
+        @content;
+    }
 }
 @mixin desktop{
-    @content;
+    @media(min-width: $desktop__breakpoint){
+        @content;
+    }
 }

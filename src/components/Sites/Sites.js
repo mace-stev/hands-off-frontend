@@ -14,16 +14,16 @@ function Sites() {
         input.preventDefault()
         const fullCommand = `ngrok http ${input.target['obs-port'].value} --domain ${input.target['ngrok-domain'].value}`
         setNgrokCommand(fullCommand)
-        const fullConfig = `
-        tunnels:
-            website:
-                addr: ${input.target['obs-port'].value}
-            schemes:
-                - https
-            host_header: "${input.target['ngrok-domain'].value}"
-            proto: http
-            domain: ${input.target['ngrok-domain'].value}
-        `
+        const fullConfig = 
+    `tunnels:
+     website:
+      addr: ${input.target['obs-port'].value}
+      schemes:
+       - https
+      host_header: "${input.target['ngrok-domain'].value}"
+      proto: http
+      domain: ${input.target['ngrok-domain'].value}`
+        
         setNgrokConfig(fullConfig)
     }
     function copyText() {

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate, useLocation, Form } from "react-router-dom"
 import bcrypt from "bcryptjs"
 import Select from "react-select";
+import youtube from "../../assets/digital_and_tv/yt_logo_mono_dark.png";
 
 
 
@@ -22,7 +23,7 @@ function PostForm() {
   const [open, setOpen] = useState(false);
   const [recordingFolder, setRecordingFolder] = useState();
   const [fileName, setFileName] = useState();
-  const [lastDomain, setLastDomain]=useState();
+  const [lastDomain, setLastDomain] = useState();
   const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
   const [store, setStore] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('23');
@@ -56,39 +57,39 @@ function PostForm() {
     }
     // Parameters to pass to OAuth 2.0 endpoint.
   }, [])
-  useEffect(() =>{
-    
-      const token = sessionStorage.getItem('jwt');
+  useEffect(() => {
+
+    const token = sessionStorage.getItem('jwt');
 
     axios.get(`/api/auth`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }).then((response)=>{
-        if(response.data['obsPort/Domain']){
-          setLastDomain(response.data['obsPort/Domain'])
-        }
-      }).catch((error)=>{
-        console.log("error getting auth route")
-      });
-     
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      if (response.data['obsPort/Domain']) {
+        setLastDomain(response.data['obsPort/Domain'])
+      }
+    }).catch((error) => {
+      console.log("error getting auth route")
+    });
 
 
-  },[])
+
+  }, [])
   useEffect(() => {
     const obs_form = document.querySelector('.PostForm__OBS-server')
     const yt_button = document.querySelector('.YT-sign-in')
-  
+
     if (store['access_token']) {
       const checkStateAndClearURL = () => {
         // Check the state here and perform necessary actions
-      
+
         // Assuming you have checked the state, and now you want to clear sensitive data from the URL
         const newURL = window.location.href.split('#')[0];
         window.history.replaceState({}, document.title, newURL);
       };
-      
+
       // Call the function when needed
       checkStateAndClearURL();
       obs_form.classList.remove('hidden')
@@ -154,7 +155,7 @@ function PostForm() {
       categoryId: selectedCategory.value
 
     }
-    const formData= new FormData()
+    const formData = new FormData()
     formData.append('video', e.target['video'].files[0])
     formData.append('params', JSON.stringify(params))
     formData.append('snippetData', JSON.stringify(snippetData))
@@ -195,45 +196,39 @@ function PostForm() {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        })
+        }).catch((error) => { console.log(error) })
       }
-     await axios.post('/api/obs', { "obsPort/Domain": port, password: password }, {
+      await axios.post('/api/obs', { "obsPort/Domain": port, "password": password }, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       }).then((response) => {
+
+        alert('Successfully connected to OBS')
+    
+
+        const eventSource = new EventSource('/api/obs/stream');
+
+        eventSource.onmessage = (event) => {
+
+          const parts = event.data.split('\n');
+          const eventType = parts[0].split(':')[0];
+
+          if (eventType === 'streamStopped') {
+            setOpen(true);
+          }
+          else if (eventType !== 'streamStopped') {
+            const file = event.data
+
+            setFileName(normalizePathForWindows(file))
+          }
         
-       alert('Sucessfully connected to OBS')
-        console.log(response)
-          const tempStore = Object.values((response.data));
-            setRecordingFolder(tempStore[0]);
-            const eventSource = new EventSource('/api/obs/stream');
-            
-            eventSource.onmessage = (event) => {
-            
-              const parts = event.data.split('\n');
-              const eventType = parts[0].split(':')[0];
-         
-              if (eventType === 'streamStopped') {
-                setOpen(true);
-              }
-              else if(eventType !== 'streamStopped'){
-                const file=event.data
-                
-                setFileName(normalizePathForWindows(file))
-                
-              }
-            console.log(parts)
-             
-            };
-            
-          }).catch((error) => {
-            console.log(error)
-          })
-          .catch((error)=>{
-            console.log(error)
-          });
+        };
+      }).catch((error) => {
+        console.log(error)
+      })
+
     } catch (error) {
       // Capture the current stack trace and attach it to the error object
       Error.captureStackTrace(error);
@@ -244,9 +239,9 @@ function PostForm() {
   }
   function copyText() {
     // Get the text to copy
-   
+
     const textToCopy = textRef.current.innerText;
-    
+
     const tempTextarea = document.createElement('textarea');
     tempTextarea.value = textToCopy;
 
@@ -260,19 +255,19 @@ function PostForm() {
 
     // Remove the temporary textarea
     document.body.removeChild(tempTextarea);
-  
+
     alert('Text copied to clipboard!');
-        
-    
-}
-function normalizePathForWindows(path) {
-  if ((/^[A-Z]:/i).test(path)) {
-    return path.replace(/\//g, '\\'); // Replace forward slashes with backslashes
-  } else {
-    return path; // Keep the path as-is for non-Windows systems
+
+
   }
-}
-  
+  function normalizePathForWindows(path) {
+    if ((/^[A-Z]:/i).test(path)) {
+      return path.replace(/\//g, '\\'); // Replace forward slashes with backslashes
+    } else {
+      return path; // Keep the path as-is for non-Windows systems
+    }
+  }
+
 
 
   return (<>
@@ -285,15 +280,15 @@ function normalizePathForWindows(path) {
       <input type='text' name='server-port/domain' placeholder="port/domain"></input>
       <input type='password' name='server-password' placeholder="password" required></input>
       <button type='submit' className="PostForm__OBS--submit">Connect To OBS</button>
-  
+
     </form>
     <form method="POST" className="YT-sign-in-form" action={oauth2Endpoint} onClick={(event) => trySampleRequest(event)}>
-      <button type="submit" className="YT-sign-in" >Sign in to YouTube</button>
+      <button type="submit" className="YT-sign-in" ><img src={youtube}/>Sign in to YouTube</button>
     </form>
     <section className="video-copy__container">
-        <button className="video-copy__button"onClick={()=>{copyText("last-domain/port")}}>Copy Last Domain/Port</button>
-        <h3 id="last-domain/port" ref={textRef}>{lastDomain}</h3>
-        </section>
+      <button className="video-copy__button" onClick={() => { copyText("last-domain/port") }}>Copy Last Domain/Port</button>
+      <h3 id="last-domain/port" ref={textRef}>{lastDomain}</h3>
+    </section>
     <Popup open={open} position="center center" closeOnDocumentClick={false}>
 
       <form className="PostForm__popup" onSubmit={(event) => popupHandler(event)}>
@@ -315,8 +310,8 @@ function normalizePathForWindows(path) {
         />
         <input type="file" name="video"></input>
         <section className="video-copy__container">
-        <button className="video-copy__button"onClick={()=>{copyText()}}>Copy Path</button>
-        <h3 id="textToCopy" ref={textRef}>{fileName}</h3>
+          <button className="video-copy__button" onClick={() => { copyText() }}>Copy Path</button>
+          <h3 id="textToCopy" ref={textRef}>{fileName}</h3>
         </section>
         <label htmlFor="videoCategory"></label>
         <button type="submit">Post Video to Youtube</button>
